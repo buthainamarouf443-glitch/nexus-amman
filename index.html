@@ -1,0 +1,1286 @@
+<title>NEXUS AMMAN</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;600&display=swap">
+<style>
+/* Layout concept: persistent command-center shell; the Amman schematic map is the dominant surface on every page. */
+:root{
+  --bg:#0B1220;--bg2:#111B2D;--side:#0D1727;--elev:#172438;--elev2:#1D2D45;--line:#26364B;
+  --cyan:#42C6D5;--blue:#6EA8FE;--red:#F05A63;--amber:#F4B860;--green:#43C59E;--violet:#A592F2;--slate:#8DA2C0;
+  --fg:#F2F5FA;--mut:#94A3B8;--dim:#6B7C93;--on-cyan:#05222A;--shadow:0 10px 30px rgba(2,6,14,.4);
+  --map-bg:#0A1019;--map-land:#0F1A2B;--map-land2:#0C1625;--map-line:#2A3C55;--map-minor:#1B2C44;--map-major:#33506F;--map-hwy:#4F7BA5;
+  --map-contour:#14223A;--map-text:#D6E0EE;--map-text2:#7F93AD;--map-halo:#0A1019;--map-wadi:#1A3A52;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light) and (min-width:99999px){:root:not([data-theme="dark"]){
+  --bg:#EDF1F7;--bg2:#FFFFFF;--side:#FFFFFF;--elev:#F2F5FA;--elev2:#E7ECF4;--line:#D5DEE9;
+  --cyan:#0C8C9E;--blue:#2F6FDB;--red:#D63A45;--amber:#B3700F;--green:#17986F;--violet:#6A55D6;--slate:#566A86;
+  --fg:#0F1B2D;--mut:#55657B;--dim:#7B8BA0;--on-cyan:#FFFFFF;--shadow:0 10px 30px rgba(30,50,80,.12);
+  --map-bg:#E3EAF3;--map-land:#F4F7FB;--map-land2:#EBF0F7;--map-line:#B6C4D6;--map-minor:#D3DCE8;--map-major:#A8BACE;--map-hwy:#7B98B8;
+  --map-contour:#D0DAE7;--map-text:#1B2B42;--map-text2:#56667C;--map-halo:#F4F7FB;--map-wadi:#BCD3E4;color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#EDF1F7;--bg2:#FFFFFF;--side:#FFFFFF;--elev:#F2F5FA;--elev2:#E7ECF4;--line:#D5DEE9;
+  --cyan:#0C8C9E;--blue:#2F6FDB;--red:#D63A45;--amber:#B3700F;--green:#17986F;--violet:#6A55D6;--slate:#566A86;
+  --fg:#0F1B2D;--mut:#55657B;--dim:#7B8BA0;--on-cyan:#FFFFFF;--shadow:0 10px 30px rgba(30,50,80,.12);
+  --map-bg:#E3EAF3;--map-land:#F4F7FB;--map-land2:#EBF0F7;--map-line:#B6C4D6;--map-minor:#D3DCE8;--map-major:#A8BACE;--map-hwy:#7B98B8;
+  --map-contour:#D0DAE7;--map-text:#1B2B42;--map-text2:#56667C;--map-halo:#F4F7FB;--map-wadi:#BCD3E4;color-scheme:light}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.ar{font-family:"Noto Sans Arabic",Inter,system-ui,sans-serif}
+
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px;z-index:50;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 18px}
+.brand svg{width:34px;height:34px;flex:none}
+.brand b{display:block;font-size:15px;letter-spacing:.14em;font-weight:700}
+.brand span{display:block;font-size:10px;letter-spacing:.2em;color:var(--mut);margin-top:2px}
+.nav-label{font-size:10.5px;letter-spacing:.16em;color:var(--dim);padding:10px 10px 6px;font-weight:600}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav-item{display:flex;align-items:center;gap:11px;height:40px;padding:0 10px;border-radius:10px;border:1px solid transparent;background:none;color:var(--mut);font-weight:500;text-align:left;transition:background .15s,color .15s}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--elev);color:var(--fg)}
+.nav-item.active{background:color-mix(in srgb,var(--cyan) 12%,transparent);color:var(--cyan);border-color:color-mix(in srgb,var(--cyan) 22%,transparent)}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;padding:1px 7px;border-radius:999px;background:var(--elev2);color:var(--fg)}
+.side-foot{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-top:16px}
+.sys{background:var(--elev);border:1px solid var(--line);border-radius:12px;padding:12px}
+.sys-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
+.sys-row+.sys-row{margin-top:8px}
+.sys-row b{color:var(--fg);font-weight:600;margin-left:auto;font-size:12px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
+.dot.amber{background:var(--amber)}
+.me{display:flex;align-items:center;gap:10px;padding:8px}
+.me small{display:block;color:var(--mut);font-size:11.5px}
+.me b{font-size:13px;font-weight:600}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--on-cyan);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none;border:0}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;min-height:64px;padding:10px 24px;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.crumbs{font-size:11.5px;color:var(--dim);display:flex;gap:6px;align-items:center}
+.crumbs b{color:var(--mut);font-weight:500}
+.top h2{font-size:17px;font-weight:650;letter-spacing:-.01em;line-height:1.2}
+.top-spacer{flex:1}
+.search{display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--mut);width:280px;transition:border-color .15s}
+.search:focus-within{border-color:var(--cyan)}
+.search svg{width:16px;height:16px;flex:none}
+.search input{background:none;border:0;outline:0;width:100%;color:var(--fg)}
+.search input::placeholder{color:var(--dim)}
+.demo-badge{font-size:10.5px;letter-spacing:.12em;font-weight:700;color:var(--amber);padding:5px 10px;border-radius:999px;border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);background:color-mix(in srgb,var(--amber) 10%,transparent);white-space:nowrap}
+.date{font-size:12.5px;color:var(--mut);white-space:nowrap}
+.icon-btn{position:relative;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);display:grid;place-items:center;color:var(--mut);transition:color .15s,border-color .15s}
+.icon-btn:hover{color:var(--fg);border-color:var(--map-major)}
+.icon-btn svg{width:18px;height:18px}
+.badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;border:2px solid var(--bg)}
+.host{position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 8px);width:340px;max-width:calc(100vw - 32px);background:var(--bg2);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);z-index:40;overflow:hidden;animation:pop .14s ease-out}
+.menu-h{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:600}
+.menu-list{max-height:360px;overflow:auto}
+.menu-item{display:flex;gap:10px;align-items:flex-start;width:100%;padding:11px 14px;background:none;border:0;border-bottom:1px solid var(--line);text-align:left}
+.menu-item:last-child{border-bottom:0}
+.menu-item:hover{background:var(--elev)}
+.menu-item small{display:block;color:var(--mut);font-size:12px}
+.menu-item .unread{width:7px;height:7px;border-radius:50%;background:var(--cyan);margin-top:6px;flex:none}
+.menu-item .unread.read{background:transparent}
+.menu.narrow{width:230px}
+.menu-link{display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:none;border:0;text-align:left;color:var(--fg)}
+.menu-link:hover{background:var(--elev)}
+.menu-link svg{width:16px;height:16px;color:var(--mut)}
+.hamb{display:none}
+
+.page{padding:24px;display:flex;flex-direction:column;gap:20px;animation:pagein .26s ease-out}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.loc{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.16em;font-weight:600;color:var(--cyan);margin-bottom:6px}
+.loc svg{width:13px;height:13px}
+.page-head h1{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.page-head p{color:var(--mut);margin-top:4px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--fg);font-weight:600;font-size:13px;transition:background .15s,border-color .15s,transform .1s;white-space:nowrap}
+.btn:hover{border-color:var(--map-major);background:var(--elev)}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:16px;height:16px}
+.btn.primary{background:var(--cyan);border-color:var(--cyan);color:var(--on-cyan)}
+.btn.primary:hover{filter:brightness(1.08);background:var(--cyan)}
+.btn.sm{height:30px;padding:0 10px;font-size:12px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.danger-ghost{color:var(--mut)}
+
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 0;flex-wrap:wrap}
+.card-h h3{font-size:14px;font-weight:650}
+.card-h small{display:block;color:var(--mut);font-size:12px;margin-top:2px;font-weight:400}
+.card-b{padding:16px 18px 18px}
+.tag{font-size:10.5px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:6px;background:var(--elev);color:var(--mut);border:1px solid var(--line);white-space:nowrap}
+.tag.live{color:var(--green);background:color-mix(in srgb,var(--green) 12%,transparent);border-color:color-mix(in srgb,var(--green) 28%,transparent)}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stat{padding:16px 18px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+.stat-top{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:12.5px;font-weight:500}
+.chip{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--c,var(--cyan)) 14%,transparent);color:var(--c,var(--cyan))}
+.chip svg{width:16px;height:16px}
+.stat-val{font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat-sub{font-size:12px;color:var(--mut)}
+.stat .spark{position:absolute;right:14px;top:18px;width:56px;height:24px;opacity:.9}
+
+.grid-map{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);gap:14px}
+.col-fill{position:relative;min-height:0}
+.col-fill>.inner{position:absolute;inset:0;display:flex;flex-direction:column;gap:14px}
+.feed{flex:1;min-height:0;display:flex;flex-direction:column}
+.feed-list{overflow:auto;flex:1;padding:6px 18px 12px}
+.ev{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left}
+.ev:last-child{border-bottom:0}
+.ev:hover .ev-t{color:var(--cyan)}
+.ev-ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c)}
+.ev-ic svg{width:15px;height:15px}
+.ev-t{font-size:13px;font-weight:550;transition:color .15s}
+.ev small{display:block;color:var(--mut);font-size:12px;margin-top:1px}
+.mix{display:flex;height:8px;border-radius:99px;overflow:hidden;background:var(--elev);gap:2px;margin:12px 0 10px}
+.mix i{display:block;height:100%}
+.mix-leg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11.5px;color:var(--mut)}
+.mix-leg b{display:block;color:var(--fg);font-size:18px;font-weight:700;letter-spacing:-.02em}
+
+.pill{--c:var(--slate);display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c);border:1px solid color-mix(in srgb,var(--c) 28%,transparent)}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c)}
+.p-Critical{--c:var(--red)}.p-High{--c:var(--amber)}.p-Medium{--c:var(--cyan)}.p-Low{--c:var(--blue)}
+.s-Reported{--c:var(--slate)}.s-Dispatched{--c:var(--blue)}.s-On{--c:var(--cyan)}.s-Resolved{--c:var(--green)}
+.t-Available{--c:var(--green)}.t-Assigned{--c:var(--blue)}.t-En{--c:var(--cyan)}.t-Busy{--c:var(--amber)}
+
+.tbl-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;min-width:720px}
+.tbl th{text-align:left;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);font-weight:600;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr{cursor:pointer;transition:background .12s}
+.tbl tbody tr:hover,.tbl tbody tr:focus-visible{background:var(--elev)}
+.tbl .id{font-weight:600;font-variant-numeric:tabular-nums;color:var(--cyan);white-space:nowrap}
+.tbl small{display:block;color:var(--mut);font-size:12px}
+.tcell{display:flex;align-items:center;gap:10px}
+.tcell .ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c);flex:none}
+.tcell .ic svg{width:15px;height:15px}
+.empty{padding:40px 18px;text-align:center;color:var(--mut)}
+.empty b{display:block;color:var(--fg);margin-bottom:4px}
+.note{font-size:12px;color:var(--mut);display:flex;align-items:center;gap:8px}
+.note svg{width:14px;height:14px;flex:none}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.toolbar .search{width:260px;background:var(--elev)}
+.seg{display:inline-flex;background:var(--elev);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{height:30px;padding:0 11px;border-radius:7px;border:0;background:none;color:var(--mut);font-size:12.5px;font-weight:550;white-space:nowrap;transition:background .15s,color .15s}
+.seg button:hover{color:var(--fg)}
+.seg button.on{background:var(--bg2);color:var(--cyan);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.select{height:38px;padding:0 32px 0 12px;border-radius:10px;border:1px solid var(--line);background:var(--elev) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 11px center;appearance:none;-webkit-appearance:none;color:var(--fg);max-width:100%}
+.select:focus{border-color:var(--cyan);outline:0}
+.select.full{width:100%}
+.lbl{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--mut);font-weight:550}
+.input,.textarea{height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--elev);color:var(--fg);width:100%}
+.textarea{height:auto;min-height:96px;padding:10px 12px;resize:vertical}
+.input:focus,.textarea:focus{border-color:var(--cyan);outline:0}
+.invalid{border-color:var(--red)!important}
+.err{color:var(--red);font-size:12px;font-weight:500}
+.count{color:var(--mut);font-size:12.5px;margin-left:auto}
+
+.overlay{position:fixed;inset:0;background:rgba(3,8,18,.58);z-index:60;animation:fade .18s ease-out}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(470px,100vw);background:var(--bg2);border-left:1px solid var(--line);z-index:61;display:flex;flex-direction:column;box-shadow:var(--shadow);animation:slide .22s ease-out}
+.drawer-h{padding:18px 20px 14px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.drawer-h .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.drawer-h h3{font-size:19px;font-weight:650;letter-spacing:-.01em}
+.drawer-b{padding:18px 20px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:18px}
+.drawer-f{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 20px}
+.tabs button{height:40px;padding:0 12px;background:none;border:0;border-bottom:2px solid transparent;color:var(--mut);font-weight:600;font-size:13px;margin-bottom:-1px}
+.tabs button.on{color:var(--cyan);border-bottom-color:var(--cyan)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.kv dt{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:3px}
+.kv dd{margin:0;font-weight:550}
+.kv .wide{grid-column:1/-1}
+.steps{display:flex;gap:6px}
+.steps div{flex:1;font-size:11px;font-weight:600;color:var(--dim);text-align:center}
+.steps div i{display:block;height:5px;border-radius:9px;background:var(--elev2);margin-bottom:6px}
+.steps div.done{color:var(--fg)}
+.steps div.done i{background:var(--cyan)}
+.tl{list-style:none;margin:0;padding:0 0 0 4px}
+.tl li{position:relative;padding:0 0 18px 22px}
+.tl li::before{content:"";position:absolute;left:3px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--bg2);border:2px solid var(--cyan)}
+.tl li::after{content:"";position:absolute;left:7px;top:17px;bottom:-2px;width:1px;background:var(--line)}
+.tl li:last-child::after{display:none}
+.tl small{display:block;color:var(--mut);font-size:12px}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(540px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;background:var(--bg2);border:1px solid var(--line);border-radius:16px;z-index:61;box-shadow:var(--shadow);animation:popc .18s ease-out}
+.modal-h{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px 0;gap:12px}
+.modal-h h3{font-size:18px;font-weight:650}
+.modal-h p{color:var(--mut);margin-top:3px;font-size:13px}
+.modal-b{padding:16px 20px;display:flex;flex-direction:column;gap:14px}
+.modal-f{padding:0 20px 18px;display:flex;justify-content:flex-end;gap:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toasts{position:fixed;right:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:calc(100vw - 32px)}
+.toast{pointer-events:auto;display:flex;gap:10px;align-items:center;background:var(--elev2);border:1px solid var(--line);border-radius:12px;padding:11px 14px;box-shadow:var(--shadow);animation:pop .2s ease-out;font-weight:550;font-size:13px}
+.toast svg{width:16px;height:16px;color:var(--green);flex:none}
+.toast.warn svg{color:var(--amber)}
+
+.map-card{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--map-bg);height:clamp(520px,68vh,720px)}
+.map-card.compact{height:420px}
+.map-svg{width:100%;height:100%;display:block;touch-action:none;cursor:grab;user-select:none}
+.map-svg.nopan{cursor:default;touch-action:auto}
+.m-badge{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:8px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:12px;font-weight:550;max-width:calc(100% - 80px)}
+.m-badge svg{width:14px;height:14px;color:var(--cyan);flex:none}
+.m-ctrl{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px}
+.m-ctrl button{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);display:grid;place-items:center;color:var(--fg);transition:border-color .15s,color .15s}
+.m-ctrl button:hover{border-color:var(--cyan);color:var(--cyan)}
+.m-ctrl button:disabled{opacity:.4;cursor:not-allowed}
+.m-ctrl svg{width:16px;height:16px}
+.m-legend{position:absolute;left:12px;bottom:12px;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--mut)}
+.m-legend h4{margin:0 0 2px;font-size:10px;letter-spacing:.14em;color:var(--dim);font-weight:700}
+.lg{display:flex;align-items:center;gap:8px;background:none;border:0;padding:1px 0;color:var(--fg);font-size:11.5px;text-align:left}
+.lg i{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+.lg.off{opacity:.4}
+.lg .sq{width:10px;height:10px;border:1.5px solid var(--cyan);border-radius:3px;flex:none;background:none}
+.lg .ring{width:10px;height:10px;border:1.5px solid var(--map-text2);border-radius:50%;flex:none;background:none}
+.m-nav{position:absolute;right:12px;bottom:12px;display:flex;align-items:flex-end;gap:12px;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:10.5px;color:var(--mut)}
+.m-scale{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.m-scale i{display:block;width:64px;height:5px;border:1.5px solid var(--mut);border-top:0}
+.m-north{width:22px;height:30px}
+.m-pop{position:absolute;left:12px;top:58px;width:292px;max-width:calc(100% - 24px);background:var(--bg2);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px;animation:pop .16s ease-out;z-index:3}
+.m-pop h4{margin:0;font-size:15px;font-weight:650}
+.m-pop .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
+.m-pop .id{color:var(--cyan);font-weight:600;font-size:12px;font-variant-numeric:tabular-nums}
+.m-pop dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:0 0 12px;font-size:12.5px;align-items:center}
+.m-pop dt{color:var(--mut)}
+.m-pop dd{margin:0;font-weight:550;text-align:right}
+.x-btn{width:26px;height:26px;border-radius:8px;border:0;background:none;color:var(--mut);display:grid;place-items:center;flex:none}
+.x-btn:hover{background:var(--elev);color:var(--fg)}
+.x-btn svg{width:15px;height:15px}
+.dl-en{font:650 14.5px Inter,system-ui,sans-serif;fill:var(--map-text);paint-order:stroke;stroke:var(--map-halo);stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.dl-ar{font:400 12px "Noto Sans Arabic",Inter,sans-serif;fill:var(--map-text2);paint-order:stroke;stroke:var(--map-halo);stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.lm-en{font:600 11.5px Inter,system-ui,sans-serif;fill:var(--cyan);paint-order:stroke;stroke:var(--map-halo);stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.lm-ar{font:400 10.5px "Noto Sans Arabic",Inter,sans-serif;fill:var(--map-text2);paint-order:stroke;stroke:var(--map-halo);stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.cir{font:700 9px Inter,sans-serif;fill:var(--map-text2);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.cell{transition:fill .18s,stroke .18s}
+.cell.click{cursor:pointer}
+.cell:hover{stroke:var(--cyan);stroke-width:1.6}
+.mk{cursor:pointer;outline:none}
+.mk .dotc{transition:transform .15s;transform-box:fill-box;transform-origin:center}
+.mk:hover .dotc,.mk:focus-visible .dotc{transform:scale(1.18)}
+.mk:focus-visible .selring{opacity:1}
+.pulse{transform-box:fill-box;transform-origin:center;animation:pulse 2.2s ease-out infinite}
+
+.bars{display:flex;flex-direction:column;gap:11px}
+.bar-row{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr) 34px;gap:12px;align-items:center;font-size:12.5px}
+.bar-row span:first-child{color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-row b{text-align:right;font-variant-numeric:tabular-nums}
+.track{height:8px;border-radius:99px;background:var(--elev);overflow:hidden}
+.fill{height:100%;border-radius:99px;background:var(--c,var(--cyan));transition:width .4s ease}
+.donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.donut{width:150px;height:150px;flex:none}
+.donut text{fill:var(--fg)}
+.donut .big{font:700 26px Inter,sans-serif;letter-spacing:-.02em}
+.donut .sm{font:500 9.5px Inter,sans-serif;fill:var(--mut)}
+.d-leg{display:flex;flex-direction:column;gap:8px;font-size:12.5px;flex:1;min-width:140px}
+.d-leg div{display:flex;align-items:center;gap:8px;color:var(--mut)}
+.d-leg i{width:10px;height:10px;border-radius:3px;background:var(--c);flex:none}
+.d-leg b{margin-left:auto;color:var(--fg);font-variant-numeric:tabular-nums}
+.chart{width:100%;height:auto;display:block}
+.chart text{font:500 11px Inter,sans-serif;fill:var(--mut)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.leg-inline{display:flex;gap:16px;font-size:12px;color:var(--mut);flex-wrap:wrap}
+.leg-inline span{display:inline-flex;align-items:center;gap:6px}
+.leg-inline i{width:10px;height:3px;border-radius:2px;background:var(--c)}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid-intel{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.team{padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;transition:border-color .15s,transform .15s}
+.team:hover{border-color:var(--map-major);transform:translateY(-1px)}
+.team-top{display:flex;gap:10px;align-items:center}
+.team-top b{display:block;font-weight:650}
+.team-top small{color:var(--mut);font-size:12px}
+.team dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12.5px}
+.team dt{color:var(--dim)}
+.team dd{margin:0;text-align:right;font-weight:550;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.avail{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mut)}
+.avail .track{flex:1;height:6px}
+.dist-row{display:grid;grid-template-columns:110px minmax(0,1fr) 24px;gap:10px;align-items:center;font-size:12.5px;padding:5px 0}
+.dist-row span:first-child{color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stack{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--elev);gap:2px}
+.stack i{display:block;height:100%;background:var(--c)}
+.leg-row{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-bottom:8px}
+.leg-row span{display:inline-flex;gap:6px;align-items:center}
+.leg-row i{width:9px;height:9px;border-radius:3px;background:var(--c)}
+.res-card{padding:18px;display:flex;flex-direction:column;gap:14px}
+.res-top{display:flex;align-items:center;gap:12px}
+.res-top h3{font-size:15px;font-weight:650}
+.res-top small{color:var(--mut)}
+.res-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.res-nums div{background:var(--elev);border-radius:10px;padding:10px}
+.res-nums small{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.res-nums b{font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.res-items{display:flex;flex-direction:column;gap:9px;border-top:1px solid var(--line);padding-top:12px}
+.res-item{display:grid;grid-template-columns:minmax(0,1fr) 78px 44px;gap:10px;align-items:center;font-size:12.5px}
+.res-item span:first-child{color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-item b{text-align:right;font-variant-numeric:tabular-nums}
+.dcard{padding:14px;text-align:left;display:flex;flex-direction:column;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;transition:border-color .15s,background .15s;color:var(--fg)}
+.dcard:hover{border-color:var(--map-major)}
+.dcard.on{border-color:var(--cyan);background:color-mix(in srgb,var(--cyan) 8%,var(--bg2))}
+.dcard .ar{color:var(--mut);font-size:12px}
+.dcard b{font-weight:650;display:block}
+.dcard .n{font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dcard .row{display:flex;align-items:flex-end;justify-content:space-between}
+.dcard small{color:var(--mut);font-size:11.5px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.facts div{background:var(--elev);border-radius:10px;padding:10px 12px}
+.facts small{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.facts b{font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.footer{padding:6px 24px 28px;color:var(--dim);font-size:12px;display:flex;gap:8px;align-items:center}
+.footer svg{width:14px;height:14px}
+
+@keyframes pagein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes slide{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(-4px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes popc{from{opacity:0;transform:translate(-50%,-48%)}to{opacity:1;transform:translate(-50%,-50%)}}
+@keyframes pulse{0%{transform:scale(.7);opacity:.65}100%{transform:scale(2.2);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@media (max-width:1280px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .date{display:none}
+  .search{width:220px}
+}
+@media (max-width:1100px){
+  .grid-map{grid-template-columns:1fr}
+  .col-fill>.inner{position:static}
+  .feed{height:420px;flex:none}
+  .grid-intel{grid-template-columns:1fr}
+  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:980px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;left:0;top:0;bottom:0;width:272px;transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
+  .side.open{transform:none}
+  .hamb{display:grid}
+  .navscrim{position:fixed;inset:0;background:rgba(3,8,18,.55);z-index:45;animation:fade .18s}
+}
+@media (max-width:720px){
+  .top{padding:10px 16px;gap:10px;flex-wrap:wrap}
+  .crumbs{display:none}
+  .search{order:9;width:100%;flex:1 1 100%}
+  .demo-badge{font-size:9.5px;padding:4px 8px}
+  .page{padding:16px;gap:16px}
+  .page-head h1{font-size:22px}
+  .stats,.grid2,.grid3{grid-template-columns:1fr}
+  .stat-val{font-size:32px}
+  .map-card{height:clamp(440px,70vh,560px)}
+  .m-pop{top:56px;width:calc(100% - 24px)}
+  .m-legend{display:none}
+  .two,.kv{grid-template-columns:1fr}
+  .toolbar .search{width:100%;flex:1 1 100%}
+  .facts{grid-template-columns:1fr 1fr 1fr}
+  .footer{padding:4px 16px 24px}
+  .menu{position:fixed;left:16px;right:16px;top:70px;width:auto}
+}
+</style>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+"use strict";
+const { useState, useMemo, useEffect, useRef, useCallback, useContext, createContext, Fragment } = React;
+const html = htm.bind(React.createElement);
+const NOW0 = Date.now();
+const Ctx = createContext(null);
+
+/* ---------- icons (24px grid, stroke) ---------- */
+const ICONS = {
+  overview: '<rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/>',
+  incidents: '<path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4M12 17.2v.1"/>',
+  teams: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M17 14.2c2.4.3 4 2.1 4 4.8"/>',
+  box: '<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5v-9Z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>',
+  city: '<path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5L9 4Z"/><path d="M9 4v13.5M15 6.5V20"/>',
+  chart: '<path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12.5 16V8M17 16v-6"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
+  bell: '<path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 2h-15L6 16.5Z"/><path d="M10 21h4"/>',
+  menu: '<path d="M4 6.5h16M4 12h16M4 17.5h16"/>',
+  x: '<path d="m6 6 12 12M18 6 6 18"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  minus: '<path d="M5 12h14"/>',
+  down: '<path d="m6 9 6 6 6-6"/>',
+  right: '<path d="m9 6 6 6-6 6"/>',
+  target: '<circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/>',
+  car: '<path d="M5 17v-5l1.7-4.4A2 2 0 0 1 8.6 6.3h6.8a2 2 0 0 1 1.9 1.3L19 12v5"/><path d="M3.5 12h17M7 17v2M17 17v2"/><circle cx="8" cy="14.5" r=".7"/><circle cx="16" cy="14.5" r=".7"/>',
+  flame: '<path d="M12 21c3.9 0 6.5-2.6 6.5-6.1 0-3-1.8-4.8-3.2-6.4-.5 1.2-1.3 2-2.3 2.3.3-3.3-1.2-6-3.6-7.8.2 3.1-1.4 4.9-2.6 6.3C5.6 11 5.5 12.7 5.5 14.9 5.5 18.4 8.1 21 12 21Z"/>',
+  cross: '<path d="M9.5 4h5v5.5H20v5h-5.5V20h-5v-5.5H4v-5h5.5V4Z"/>',
+  wrench: '<path d="M15 4.5a4.5 4.5 0 0 0-4.2 6.1L4 17.4V20h2.6l6.8-6.8A4.5 4.5 0 0 0 19.5 9l-3 3-2.5-.6-.6-2.5 3-3A4.5 4.5 0 0 0 15 4.5Z"/>',
+  cone: '<path d="M12 4 7.5 18h9L12 4Z"/><path d="M9.2 12h5.6M4 20h16"/>',
+  shield: '<path d="M12 3 4.5 6v5.5c0 4.5 3 8 7.5 9.5 4.5-1.5 7.5-5 7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/>',
+  pin: '<path d="M12 21s6.5-5.6 6.5-11a6.5 6.5 0 1 0-13 0c0 5.4 6.5 11 6.5 11Z"/><circle cx="12" cy="10" r="2.3"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  filter: '<path d="M4 6h16M7 12h10M10 18h4"/>',
+  user: '<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/>',
+  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.1"/>',
+  refresh: '<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3L19.5 9M19.5 4.5V9H15"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  pulse: '<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
+  landmark: '<path d="M3.5 20h17M5.5 20V10M10 20V10M14 20V10M18.5 20V10M3.5 10 12 4l8.5 6"/>',
+  send: '<path d="m21 3-9.5 18-2.2-7.8L2 11 21 3Z"/>',
+};
+function Icon({ n, size }) {
+  return html`<svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" dangerouslySetInnerHTML=${{ __html: ICONS[n] || '' }} />`;
+}
+function Logo() {
+  return html`<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" fill="none" stroke="var(--cyan)" strokeWidth="1.7" strokeLinejoin="round"/><path d="M16 9v7M16 16l-6 3.5M16 16l6 3.5" stroke="var(--cyan)" strokeWidth="1.4" opacity=".6" fill="none" strokeLinecap="round"/><circle cx="16" cy="16" r="3.2" fill="var(--cyan)"/><circle cx="16" cy="8.6" r="1.8" fill="var(--blue)"/><circle cx="9.6" cy="19.8" r="1.8" fill="var(--blue)"/><circle cx="22.4" cy="19.8" r="1.8" fill="var(--blue)"/></svg>`;
+}
+
+/* ---------- domain constants ---------- */
+const CATS = {
+  traffic: { label: 'Traffic Accident', icon: 'car', color: 'var(--blue)', team: 'traffic' },
+  fire: { label: 'Fire', icon: 'flame', color: 'var(--violet)', team: 'fire' },
+  medical: { label: 'Medical Emergency', icon: 'cross', color: 'var(--cyan)', team: 'medical' },
+  infra: { label: 'Infrastructure Hazard', icon: 'wrench', color: 'var(--green)', team: 'infra' },
+  road: { label: 'Road Obstruction', icon: 'cone', color: 'var(--slate)', team: 'traffic' },
+};
+const TEAMCATS = {
+  medical: { label: 'Medical Response', icon: 'cross', color: 'var(--cyan)' },
+  fire: { label: 'Fire Response', icon: 'flame', color: 'var(--violet)' },
+  traffic: { label: 'Traffic Support', icon: 'car', color: 'var(--blue)' },
+  infra: { label: 'Infrastructure Support', icon: 'wrench', color: 'var(--green)' },
+};
+const PRIORITIES = ['Critical', 'High', 'Medium', 'Low'];
+const PRANK = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+const STATUSES = ['Reported', 'Dispatched', 'On Scene', 'Resolved'];
+const sClass = (s) => 's-' + s.split(' ')[0];
+const tClass = (s) => 't-' + s.split(' ')[0];
+const pColor = (p) => (p === 'Critical' ? 'var(--red)' : p === 'High' ? 'var(--amber)' : 'var(--cyan)');
+
+const DISTRICTS = [
+  { id: 'jubeiha', en: 'Al-Jubeiha', ar: 'الجبيهة', x: 310, y: 105, lx: 300, ly: 98, about: 'Northern district adjoining the University of Jordan area.' },
+  { id: 'uj', en: 'University of Jordan', ar: 'الجامعة الأردنية', x: 410, y: 165, lx: 425, ly: 190, about: 'Campus district in the north of the city.' },
+  { id: 'tabarbour', en: 'Tabarbour', ar: 'طبربور', x: 620, y: 190, lx: 628, ly: 172, about: 'North-eastern residential and light-industrial neighborhood.' },
+  { id: 'shmeisani', en: 'Shmeisani', ar: 'الشميساني', x: 350, y: 262, lx: 340, ly: 246, about: 'Commercial and residential district with offices and hotels.' },
+  { id: 'abdali', en: 'Abdali', ar: 'العبدلي', x: 460, y: 285, lx: 446, ly: 262, about: 'Urban redevelopment district anchored by Abdali Boulevard.' },
+  { id: 'khalda', en: 'Khalda', ar: 'خلدا', x: 165, y: 290, lx: 150, ly: 262, about: 'Residential and commercial area in western Amman.' },
+  { id: 'marka', en: 'Marka', ar: 'ماركا', x: 740, y: 320, lx: 750, ly: 300, about: 'Eastern district known for Amman Civil Airport at Marka.' },
+  { id: 'jabal', en: 'Jabal Amman', ar: 'جبل عمّان', x: 385, y: 395, lx: 372, ly: 366, about: 'Historic central hill known for its numbered circles and cultural venues.' },
+  { id: 'downtown', en: 'Downtown', full: 'Downtown / Al-Balad', ar: 'وسط البلد', x: 520, y: 425, lx: 590, ly: 478, about: 'Historic core around the Roman Theatre and the Citadel hill.' },
+  { id: 'sweifieh', en: 'Sweifieh', ar: 'الصويفية', x: 270, y: 445, lx: 270, ly: 462, about: 'Retail and residential neighborhood in western Amman.' },
+];
+const DMAP = Object.fromEntries(DISTRICTS.map((d) => [d.id, d]));
+const LANDMARKS = [
+  { id: 'citadel', en: 'Amman Citadel', ar: 'جبل القلعة', x: 468, y: 350, dx: 12, dy: 4, a: 'start' },
+  { id: 'theatre', en: 'Roman Theatre', ar: 'المدرج الروماني', x: 503, y: 398, dx: 12, dy: -6, a: 'start' },
+  { id: 'blvd', en: 'Abdali Boulevard', ar: 'بوليفارد العبدلي', x: 478, y: 306, dx: 12, dy: 2, a: 'start' },
+  { id: 'khbp', en: 'King Hussein Business Park', ar: 'مجمع الملك حسين للأعمال', x: 250, y: 318, dx: 12, dy: 2, a: 'start' },
+  { id: 'ujl', en: 'University of Jordan', ar: 'الجامعة الأردنية', x: 410, y: 140, dx: 0, dy: -12, a: 'middle', noLabel: true },
+];
+
+/* ---------- geometry ---------- */
+const MW = 1000, MH = 660;
+const OUTLINE = [[110,250],[150,170],[250,110],[330,62],[430,70],[540,110],[640,120],[740,150],[850,200],[905,290],[885,380],[800,440],[700,480],[620,520],[540,552],[430,556],[330,540],[220,505],[130,440],[95,350]];
+function clipHalf(poly, a, b, c) {
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const p = poly[i], q = poly[(i + 1) % poly.length];
+    const dp = a * p[0] + b * p[1] - c, dq = a * q[0] + b * q[1] - c;
+    if (dp <= 0) out.push(p);
+    if ((dp < 0 && dq > 0) || (dp > 0 && dq < 0)) { const t = dp / (dp - dq); out.push([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]); }
+  }
+  return out;
+}
+function cellOf(d) {
+  let poly = OUTLINE;
+  DISTRICTS.forEach((o) => {
+    if (o.id === d.id) return;
+    poly = clipHalf(poly, o.x - d.x, o.y - d.y, (o.x * o.x + o.y * o.y - d.x * d.x - d.y * d.y) / 2);
+  });
+  return poly;
+}
+const polyD = (p) => 'M' + p.map((q) => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join('L') + 'Z';
+function smooth(pts, closed) {
+  const n = pts.length;
+  const P = (i) => (closed ? pts[((i % n) + n) % n] : pts[Math.max(0, Math.min(n - 1, i))]);
+  const f = (v) => v.toFixed(1);
+  let d = 'M' + f(pts[0][0]) + ',' + f(pts[0][1]);
+  const last = closed ? n : n - 1;
+  for (let i = 0; i < last; i++) {
+    const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+    d += 'C' + f(p1[0] + (p2[0] - p0[0]) / 6) + ',' + f(p1[1] + (p2[1] - p0[1]) / 6) + ' ' + f(p2[0] - (p3[0] - p1[0]) / 6) + ',' + f(p2[1] - (p3[1] - p1[1]) / 6) + ' ' + f(p2[0]) + ',' + f(p2[1]);
+  }
+  return closed ? d + 'Z' : d;
+}
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function inPoly(pt, poly) {
+  let ins = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+    if (yi > pt[1] !== yj > pt[1] && pt[0] < ((xj - xi) * (pt[1] - yi)) / (yj - yi) + xi) ins = !ins;
+  }
+  return ins;
+}
+function streets(d, n) {
+  const r = rng(n * 977 + 13); let s = '';
+  [30, 58, 88].forEach((R, ri) => {
+    const pts = [], m = 9 + ri * 3;
+    for (let k = 0; k < m; k++) { const a = (k / m) * Math.PI * 2 + r() * 0.3, rr = R * (0.85 + r() * 0.3); pts.push([d.x + Math.cos(a) * rr * 1.15, d.y + Math.sin(a) * rr * 0.9]); }
+    s += smooth(pts, true);
+  });
+  for (let k = 0; k < 11; k++) {
+    const a = r() * Math.PI * 2; const pts = [[d.x, d.y]]; let x = d.x, y = d.y;
+    for (let m = 0; m < 5; m++) { const aa = a + (r() - 0.5) * 0.5; x += Math.cos(aa) * 28; y += Math.sin(aa) * 28; pts.push([x, y]); }
+    s += smooth(pts);
+  }
+  return s;
+}
+function contour(cx, cy, R, seed) {
+  const r = rng(seed), pts = [];
+  for (let k = 0; k < 10; k++) { const a = (k / 10) * Math.PI * 2, rr = R * (0.8 + r() * 0.4); pts.push([cx + Math.cos(a) * rr * 1.3, cy + Math.sin(a) * rr]); }
+  return smooth(pts, true);
+}
+const CITY = DISTRICTS.map((d, i) => { const poly = cellOf(d); return { ...d, poly, path: polyD(poly), st: streets(d, i + 1), alt: i % 2 === 1 }; });
+const CMAP = Object.fromEntries(CITY.map((d) => [d.id, d]));
+const CONTOURS = (() => {
+  let s = '';
+  [[385,395,1],[470,350,2],[300,300,3],[560,300,4],[200,430,5],[150,120,6],[800,520,7],[860,110,8],[640,600,9],[120,560,10]].forEach(([x, y, k]) => { [34, 62, 92, 124].forEach((R, i) => { s += contour(x, y, R, k * 31 + i); }); });
+  return s;
+})();
+const ROADS = {
+  hwy: [
+    [[400,150],[385,205],[362,262],[405,302],[452,332],[492,392],[522,442],[560,520],[585,600]],
+    [[520,425],[590,410],[660,372],[735,330],[805,296],[890,262]],
+    [[100,300],[170,290],[262,275],[350,262],[460,285],[560,250],[620,198]],
+  ],
+  major: [
+    [[300,92],[350,130],[410,162],[500,182],[620,196],[720,212],[860,185]],
+    [[470,405],[430,398],[385,392],[340,384],[300,378],[262,368],[225,356],[190,340],[140,318],[100,300]],
+    [[270,445],[330,425],[385,395]],
+    [[250,540],[275,480],[270,445],[240,380],[165,290],[150,200]],
+    [[460,285],[480,330],[470,365],[504,402]],
+    [[620,198],[680,260],[735,330],[760,420]],
+    [[350,262],[300,200],[310,105]],
+    [[520,425],[470,470],[430,556]],
+  ],
+  wadi: [[130,520],[260,500],[360,470],[460,438],[520,425],[600,448],[700,430],[820,392],[900,360]],
+};
+const ROAD_D = { hwy: ROADS.hwy.map((p) => smooth(p)).join(''), major: ROADS.major.map((p) => smooth(p)).join(''), wadi: smooth(ROADS.wadi) };
+const CIRCLES = [[440,400],[400,394],[360,388],[320,381],[282,372],[248,362],[212,350],[176,335]];
+
+/* ---------- seeded demo data (all fictional) ---------- */
+const TEAM_DEF = [
+  ['MED-01','Medic Falcon','medical','abdali'],['MED-02','Medic Orion','medical','shmeisani'],['MED-03','Medic Cedar','medical','khalda'],
+  ['MED-04','Medic Olive','medical','marka'],['MED-05','Medic Atlas','medical','downtown'],['MED-06','Medic Jasmine','medical','sweifieh'],
+  ['FIR-01','Fire Rapid One','fire','marka'],['FIR-02','Fire Rapid Two','fire','jabal'],['FIR-03','Fire Rapid Three','fire','tabarbour'],['FIR-04','Fire Rapid Four','fire','khalda'],
+  ['TRF-01','Traffic Support One','traffic','khalda'],['TRF-02','Traffic Support Two','traffic','sweifieh'],['TRF-03','Traffic Support Three','traffic','abdali'],['TRF-04','Traffic Support Four','traffic','marka'],
+  ['INF-01','Infrastructure Crew One','infra','jubeiha'],['INF-02','Infrastructure Crew Two','infra','sweifieh'],['INF-03','Infrastructure Crew Three','infra','jabal'],['INF-04','Infrastructure Crew Four','infra','downtown'],
+];
+const TEAMS = TEAM_DEF.map(([id, name, cat, home]) => ({ id, name, cat, home }));
+const TMAP = Object.fromEntries(TEAMS.map((t) => [t.id, t]));
+
+const SEED = [
+  [2401,'traffic','Traffic Collision','khalda','7th Circle','High','Dispatched',14,'TRF-01','Two-vehicle collision reported near the circle exit. One lane is blocked.',[212,350]],
+  [2402,'medical','Medical Assistance','abdali','Abdali Boulevard','Critical','On Scene',9,'MED-01','Adult reported unresponsive in a public plaza. First responders are on scene.',[470,296]],
+  [2403,'fire','Fire Alert','marka','Marka commercial strip','High','Dispatched',22,'FIR-01','Smoke reported from a ground-floor storage unit in a commercial block.'],
+  [2404,'road','Road Obstruction','sweifieh','Sweifieh main road','Medium','Dispatched',31,'TRF-02','Fallen signage is partially blocking the right lane.'],
+  [2405,'infra','Infrastructure Hazard','downtown','Near the Al-Balad market','Medium','Reported',6,'INF-04','Surface subsidence reported beside a pedestrian crossing.'],
+  [2406,'medical','Medical Assistance','shmeisani','Shmeisani office district','High','On Scene',18,'MED-02','Elderly patient with breathing difficulty. Ambulance attending.'],
+  [2407,'traffic','Minor Collision','tabarbour','Tabarbour junction','Medium','Reported',4,null,'Rear-end collision. Vehicles moved to the shoulder.'],
+  [2408,'fire','Building Fire Alarm','jabal','Jabal Amman residential street','Critical','Dispatched',11,'FIR-02','Apartment fire alarm with reports of smoke in the stairwell.'],
+  [2409,'infra','Water Main Leak','jubeiha','Al-Jubeiha side street','High','Dispatched',47,'INF-01','Leaking main is flooding a side street and reducing traffic flow.'],
+  [2410,'road','Road Obstruction','uj','Campus access road','Low','Reported',52,null,'Event barriers left across the access lane.'],
+  [2411,'medical','Fall Injury','khalda','Khalda residential block','Medium','Dispatched',25,'MED-03','Fall injury reported. Patient is conscious and responsive.'],
+  [2412,'traffic','Traffic Collision','abdali','Abdali ring junction','High','On Scene',16,'TRF-03','Multi-vehicle slowdown following a collision. Lane control in place.'],
+  [2413,'road','Stalled Heavy Vehicle','marka','Marka main road','Medium','On Scene',38,'TRF-04','Stalled heavy vehicle is blocking one lane.'],
+  [2414,'infra','Signal Outage','sweifieh','Sweifieh traffic signals','Medium','Dispatched',29,'INF-02','Signal cluster is offline. Manual traffic control requested.'],
+  [2415,'fire','Small Waste Fire','tabarbour','Tabarbour workshop area','Medium','Reported',8,null,'Small waste fire reported behind a workshop.'],
+  [2416,'medical','Minor Injury','downtown','Downtown pedestrian zone','Low','Reported',12,null,'Visitor with a minor injury requesting assistance.'],
+  [2417,'infra','Retaining Wall Cracks','jabal','Jabal Amman roadside wall','High','On Scene',63,'INF-03','Cracks observed on a roadside retaining wall. Area coned off.'],
+  [2418,'traffic','Minor Collision','shmeisani','Shmeisani main street','Low','Reported',21,null,'Drivers exchanging details. No injuries reported.'],
+  [2419,'road','Debris on Carriageway','jubeiha','Al-Jubeiha roundabout','Medium','Reported',33,null,'Debris on the carriageway after strong winds.'],
+  [2420,'medical','Medical Assistance','marka','Marka residential area','High','Reported',5,'MED-04','Caller requests an ambulance and reports chest pain.'],
+  [2421,'fire','Alarm Activation','khalda','Khalda villa district','Low','Reported',41,null,'Alarm activation with no smoke confirmed. Verification requested.'],
+  [2422,'infra','Street Lighting Outage','uj','Campus pedestrian path','Low','Reported',75,null,'Street lighting outage along a pedestrian path.'],
+  [2423,'traffic','Traffic Slowdown','sweifieh','Sweifieh commercial area','Medium','Reported',19,null,'Congestion building after a minor collision at a junction.'],
+  [2424,'road','Service Lane Blocked','downtown','Downtown service road','Low','Reported',27,null,'Delivery vehicle blocking a service lane.'],
+];
+function placeIn(distId, n, forced) {
+  if (forced) return forced;
+  const d = CMAP[distId], r = rng(n * 131 + 7);
+  for (let k = 0; k < 40; k++) {
+    const a = r() * Math.PI * 2, rad = (k < 20 ? 48 : 26) * (0.6 + r() * 0.6);
+    const pt = [d.x + Math.cos(a) * rad, d.y + Math.sin(a) * rad * 0.8];
+    if (inPoly(pt, d.poly)) return [Math.round(pt[0]), Math.round(pt[1])];
+  }
+  return [d.x, d.y + 30];
+}
+function buildIncident(row) {
+  const [num, cat, title, district, location, priority, status, mins, team, desc, forced] = row;
+  const t0 = NOW0 - mins * 60000;
+  const tl = [{ t: t0, text: 'Report received through demo intake' }];
+  if (team) tl.push({ t: t0 + mins * 0.15 * 60000, text: team + ' assigned by coordinator' });
+  if (status === 'Dispatched' || status === 'On Scene') tl.push({ t: t0 + mins * 0.3 * 60000, text: 'Team dispatched to location' });
+  if (status === 'On Scene') tl.push({ t: t0 + mins * 0.55 * 60000, text: 'Team arrived on scene' });
+  return { id: 'DEMO-' + num, num, cat, title, district, location, priority, status, t0, team, desc, pos: placeIn(district, num, forced), tl };
+}
+const seedIncidents = () => SEED.map(buildIncident);
+
+const RES = [
+  { id: 'veh', label: 'Emergency Vehicles', icon: 'car', color: 'var(--cyan)', items: [['Ambulances',40,31],['Fire Engines',24,20],['Traffic Patrol Units',36,30],['Utility Trucks',20,17]] },
+  { id: 'med', label: 'Medical Equipment', icon: 'cross', color: 'var(--green)', items: [['Defibrillators',80,72],['Trauma Kits',120,108],['Oxygen Units',60,54],['Stretchers',40,36]] },
+  { id: 'sup', label: 'Support Units', icon: 'teams', color: 'var(--blue)', items: [['Mobile Command Units',10,7],['Light Towers',30,24],['Generators',25,19],['Barrier Trailers',15,12]] },
+  { id: 'saf', label: 'Safety Equipment', icon: 'shield', color: 'var(--violet)', items: [['Cones and Barriers',200,170],['Protective Gear Sets',120,102],['Hazard Signage',50,42],['Extinguisher Packs',30,26]] },
+].map((c) => ({ ...c, total: c.items.reduce((s, i) => s + i[1], 0), avail: c.items.reduce((s, i) => s + i[2], 0) }));
+const RES_TOTAL = RES.reduce((s, c) => s + c.total, 0);
+const RES_AVAIL = RES.reduce((s, c) => s + c.avail, 0);
+
+/* ---------- helpers ---------- */
+const fmtTime = (ms) => new Date(ms).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+const rel = (ms, now) => {
+  const m = Math.max(0, Math.round((now - ms) / 60000));
+  if (m < 1) return 'just now';
+  if (m < 60) return m + ' min ago';
+  const h = Math.floor(m / 60), r = m % 60;
+  return h + ' h' + (r ? ' ' + r + ' min' : '') + ' ago';
+};
+const teamState = (team, incidents) => {
+  const inc = incidents.find((i) => i.team === team.id && i.status !== 'Resolved');
+  if (!inc) return { status: 'Available', inc: null, district: team.home };
+  const status = inc.status === 'On Scene' ? 'Busy' : inc.status === 'Dispatched' ? 'En Route' : 'Assigned';
+  return { status, inc, district: inc.district };
+};
+const AVAIL_BAR = { Available: 100, Assigned: 62, 'En Route': 34, Busy: 12 };
+const AVAIL_TXT = { Available: 'Ready now', Assigned: 'Mobilizing', 'En Route': 'Free in ~25 min', Busy: 'Free in ~40 min' };
+const countBy = (arr, fn) => arr.reduce((m, x) => { const k = fn(x); m[k] = (m[k] || 0) + 1; return m; }, {});
+/* ---------- small shared components ---------- */
+const PriPill = ({ p }) => html`<span className=${'pill p-' + p}>${p}</span>`;
+const StatPill = ({ s }) => html`<span className=${'pill ' + sClass(s)}>${s}</span>`;
+const TeamPill = ({ s }) => html`<span className=${'pill ' + tClass(s)}>${s}</span>`;
+const CatIcon = ({ cat, tc }) => {
+  const c = tc ? TEAMCATS[cat] : CATS[cat];
+  return html`<span className="ic" style=${{ '--c': c.color }}><${Icon} n=${c.icon} size=${15} /></span>`;
+};
+function Seg({ value, onChange, options, label }) {
+  return html`<div className="seg" role="group" aria-label=${label}>${options.map((o) => html`<button key=${o.v} type="button" className=${value === o.v ? 'on' : ''} aria-pressed=${value === o.v} onClick=${() => onChange(o.v)}>${o.l}</button>`)}</div>`;
+}
+function Spark({ values, color }) {
+  const w = 92, h = 34, mx = Math.max(...values), mn = Math.min(...values);
+  const pts = values.map((v, i) => [(i / (values.length - 1)) * (w - 6) + 3, h - 5 - ((v - mn) / (mx - mn || 1)) * (h - 12)]);
+  const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  const last = pts[pts.length - 1];
+  return html`<svg className="spark" viewBox=${'0 0 ' + w + ' ' + h} aria-hidden="true"><path d=${line + 'L' + last[0] + ',' + h + 'L' + pts[0][0] + ',' + h + 'Z'} fill=${color} fillOpacity=".12"/><path d=${line} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx=${last[0]} cy=${last[1]} r="2.6" fill=${color}/></svg>`;
+}
+function StatCard({ icon, color, label, value, sub, spark }) {
+  return html`<div className="card stat" style=${{ '--c': color }}>
+    <div className="stat-top"><span className="chip"><${Icon} n=${icon} size=${16} /></span>${label}</div>
+    <div className="stat-val">${value}</div>
+    <div className="stat-sub">${sub}</div>
+    ${spark && html`<${Spark} values=${spark} color=${color} />`}
+  </div>`;
+}
+function HBars({ rows, max, unit }) {
+  const m = max || Math.max(1, ...rows.map((r) => r.value));
+  return html`<div className="bars">${rows.map((r) => html`<div className="bar-row" key=${r.label}><span title=${r.label}>${r.label}</span><div className="track"><div className="fill" style=${{ width: (r.value / m) * 100 + '%', '--c': r.color || 'var(--cyan)' }}></div></div><b>${r.value}${unit || ''}</b></div>`)}</div>`;
+}
+function Donut({ parts, big, small }) {
+  const total = parts.reduce((s, p) => s + p.value, 0) || 1;
+  let off = 0;
+  return html`<div className="donut-wrap">
+    <svg className="donut" viewBox="0 0 42 42" role="img" aria-label=${small}>
+      <circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--elev)" strokeWidth="5.2"/>
+      ${parts.map((p) => { const len = (p.value / total) * 100; const el = html`<circle key=${p.label} cx="21" cy="21" r="15.9155" fill="none" stroke=${p.color} strokeWidth="5.2" strokeDasharray=${Math.max(0, len - 0.8) + ' ' + (100 - Math.max(0, len - 0.8))} strokeDashoffset=${25 - off} />`; off += len; return el; })}
+      <text className="big" x="21" y="22.5" textAnchor="middle" fontSize="8.6" fontWeight="700" style=${{ font: '700 8.6px Inter,sans-serif' }}>${big}</text>
+      <text className="sm" x="21" y="27.6" textAnchor="middle" style=${{ font: '500 3.1px Inter,sans-serif' }}>${small}</text>
+    </svg>
+    <div className="d-leg">${parts.map((p) => html`<div key=${p.label} style=${{ '--c': p.color }}><i></i>${p.label}<b>${p.value}</b></div>`)}</div>
+  </div>`;
+}
+function LineChart({ labels, series, height }) {
+  const W = 620, H = height || 230, L = 34, R = 14, T = 14, B = 26;
+  const all = series.flatMap((s) => s.values);
+  const mx = Math.max(...all), step = mx > 60 ? 20 : mx > 30 ? 10 : 5, top = Math.ceil(mx / step) * step;
+  const X = (i) => L + (i / (labels.length - 1)) * (W - L - R), Y = (v) => T + (1 - v / top) * (H - T - B);
+  const ticks = []; for (let v = 0; v <= top; v += step) ticks.push(v);
+  const every = Math.ceil(labels.length / 8);
+  return html`<svg className="chart" viewBox=${'0 0 ' + W + ' ' + H} role="img" aria-label="Illustrative response activity trend">
+    <defs>${series.map((s, i) => html`<linearGradient key=${i} id=${'lg' + i} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor=${s.color} stopOpacity=".28"/><stop offset="1" stopColor=${s.color} stopOpacity="0"/></linearGradient>`)}</defs>
+    ${ticks.map((v) => html`<g key=${v}><line className="grid" x1=${L} x2=${W - R} y1=${Y(v)} y2=${Y(v)} strokeDasharray=${v === 0 ? '' : '3 4'} /><text x=${L - 8} y=${Y(v) + 3.5} textAnchor="end">${v}</text></g>`)}
+    ${labels.map((l, i) => (i % every === 0 ? html`<text key=${i} x=${X(i)} y=${H - 7} textAnchor="middle">${l}</text>` : null))}
+    ${series.map((s, si) => {
+      const d = s.values.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ',' + Y(v).toFixed(1)).join('');
+      const n = s.values.length - 1;
+      return html`<g key=${s.name}>${si === 0 && html`<path d=${d + 'L' + X(n) + ',' + Y(0) + 'L' + X(0) + ',' + Y(0) + 'Z'} fill=${'url(#lg0)'} />`}<path d=${d} fill="none" stroke=${s.color} strokeWidth="2.2" strokeLinejoin="round" strokeLinecap="round"/><circle cx=${X(n)} cy=${Y(s.values[n])} r="4" fill=${s.color} stroke="var(--bg2)" strokeWidth="2"/></g>`;
+    })}
+  </svg>`;
+}
+
+/* ---------- the Amman map ---------- */
+function AmmanMap({ uid, incidents, selectedId, onSelect, onOpen, compact, heat, selDistrict, onDistrict }) {
+  const [z, setZ] = useState(1);
+  const [c, setC] = useState([MW / 2, MH / 2]);
+  const [lv, setLv] = useState({ Critical: true, High: true, Normal: true });
+  const ref = useRef(null), drag = useRef(null);
+  const [asp, setAsp] = useState(1.5);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const f = () => { const r = el.getBoundingClientRect(); if (r.width > 0 && r.height > 0) setAsp(r.width / r.height); };
+    f();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(f); ro.observe(el); return () => ro.disconnect();
+  }, []);
+  const bw = Math.max(900, Math.min(1000, 560 * asp)), bh = bw / asp;
+  const w = bw / z, h = bh / z;
+  const cx = Math.min(Math.max(MW - w / 2, MW / 2), Math.max(Math.min(w / 2, MW / 2), c[0])), cy = Math.min(Math.max(MH - h / 2, MH / 2), Math.max(Math.min(h / 2, MH / 2), c[1]));
+  const vb = [cx - w / 2, cy - h / 2, w, h].map((v) => v.toFixed(1)).join(' ');
+  const maxHeat = heat ? Math.max(1, ...Object.values(heat)) : 1;
+  const sel = incidents && incidents.find((i) => i.id === selectedId);
+  const level = (p) => (p === 'Critical' ? 'Critical' : p === 'High' ? 'High' : 'Normal');
+  const zoom = (dz) => { const nz = Math.min(3, Math.max(1, z + dz)); setZ(nz); if (nz === 1) setC([MW / 2, MH / 2]); };
+  const down = (e) => { if (compact) return; drag.current = { x: e.clientX, y: e.clientY, c: [cx, cy], moved: false, id: e.pointerId }; };
+  const move = (e) => {
+    const d = drag.current; if (!d) return;
+    const dx = e.clientX - d.x, dy = e.clientY - d.y;
+    if (!d.moved && Math.hypot(dx, dy) < 5) return;
+    if (!d.moved) { d.moved = true; try { ref.current.setPointerCapture(d.id); } catch (_) {} }
+    const r = ref.current.getBoundingClientRect(), s = Math.min(r.width / w, r.height / h);
+    setC([d.c[0] - dx / s, d.c[1] - dy / s]);
+  };
+  const up = () => { drag.current = null; };
+  const pid = (s) => uid + '-' + s;
+  return html`<div className=${'map-card' + (compact ? ' compact' : '')}>
+    <svg ref=${ref} className=${'map-svg' + (compact ? ' nopan' : '')} viewBox=${vb} preserveAspectRatio="xMidYMid meet" role="img" aria-label="Illustrative schematic map of Amman with demo data" onPointerDown=${down} onPointerMove=${move} onPointerUp=${up} onPointerCancel=${up}>
+      <defs>${CITY.map((d) => html`<clipPath key=${d.id} id=${pid(d.id)}><path d=${d.path}/></clipPath>`)}</defs>
+      <rect x="-300" y="-300" width=${MW + 600} height=${MH + 600} fill="var(--map-bg)"/>
+      <path d=${CONTOURS} fill="none" stroke="var(--map-contour)" strokeWidth="1.1"/>
+      <path d=${ROAD_D.wadi} fill="none" stroke="var(--map-wadi)" strokeWidth="13" strokeLinecap="round" opacity=".7"/>
+      ${CITY.map((d) => {
+        const hv = heat ? heat[d.id] || 0 : 0;
+        const fill = heat ? 'color-mix(in srgb, var(--cyan) ' + (10 + (hv / maxHeat) * 42).toFixed(0) + '%, var(--map-land))' : d.alt ? 'var(--map-land2)' : 'var(--map-land)';
+        return html`<g key=${d.id}>
+          <path className=${'cell' + (onDistrict ? ' click' : '')} d=${d.path} fill=${fill} stroke=${selDistrict === d.id ? 'var(--cyan)' : 'var(--map-line)'} strokeWidth=${selDistrict === d.id ? 2.4 : 1.2} strokeLinejoin="round" onClick=${onDistrict ? () => onDistrict(d.id) : undefined} />
+          <g clipPath=${'url(#' + pid(d.id) + ')'} style=${{ pointerEvents: 'none' }}><path d=${d.st} fill="none" stroke="var(--map-minor)" strokeWidth="1" strokeLinecap="round"/></g>
+        </g>`;
+      })}
+      <path d=${polyD(OUTLINE)} fill="none" stroke="var(--map-major)" strokeWidth="1.4" strokeDasharray="2 6" strokeLinecap="round" style=${{ pointerEvents: 'none' }}/>
+      <g style=${{ pointerEvents: 'none' }} fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <path d=${ROAD_D.major} stroke="var(--map-major)" strokeWidth="2.2"/>
+        <path d=${ROAD_D.hwy} stroke="var(--map-hwy)" strokeWidth="3.6"/>
+      </g>
+      <g style=${{ pointerEvents: 'none' }}>${CIRCLES.map((p, i) => html`<g key=${i}><circle cx=${p[0]} cy=${p[1]} r="8.5" fill="var(--map-bg)" stroke="var(--map-hwy)" strokeWidth="1.4"/><text className="cir" x=${p[0]} y=${p[1] + 0.5}>${i + 1}</text></g>`)}</g>
+      ${CITY.map((d) => html`<g key=${d.id} style=${{ pointerEvents: 'none' }}><text className="dl-en" x=${d.lx} y=${d.ly} textAnchor="middle">${d.id === 'downtown' ? 'Downtown / Al-Balad' : d.en}</text><text className="dl-ar" x=${d.lx} y=${d.ly + 14} textAnchor="middle">${d.ar}</text>${heat && html`<g><circle cx=${d.lx} cy=${d.ly + 32} r="9" fill="var(--cyan)"/><text x=${d.lx} y=${d.ly + 32.5} textAnchor="middle" dominantBaseline="central" style=${{ font: '700 10px Inter,sans-serif', fill: 'var(--on-cyan)' }}>${heat[d.id] || 0}</text></g>`}</g>`)}
+      ${LANDMARKS.map((m) => html`<g key=${m.id} style=${{ pointerEvents: 'none' }}>
+        <rect x=${m.x - 5.5} y=${m.y - 5.5} width="11" height="11" rx="3" transform=${'rotate(45 ' + m.x + ' ' + m.y + ')'} fill="var(--map-bg)" stroke="var(--cyan)" strokeWidth="1.6"/>
+        <circle cx=${m.x} cy=${m.y} r="1.8" fill="var(--cyan)"/>
+        ${!m.noLabel && html`<text className="lm-en" x=${m.x + m.dx} y=${m.y + m.dy} textAnchor=${m.a}>${m.en}</text><text className="lm-ar" x=${m.x + m.dx} y=${m.y + m.dy + 12} textAnchor=${m.a}>${m.ar}</text>`}
+      </g>`)}
+      ${!compact && incidents && incidents.filter((i) => i.status !== 'Resolved' && lv[level(i.priority)]).map((i) => {
+        const col = pColor(i.priority), isSel = i.id === selectedId;
+        return html`<g key=${i.id} className="mk" tabIndex="0" role="button" aria-label=${i.id + ' ' + i.title + ', ' + i.priority + ' priority, ' + DMAP[i.district].en} transform=${'translate(' + i.pos[0] + ' ' + i.pos[1] + ')'} onPointerDown=${(e) => e.stopPropagation()} onClick=${(e) => { e.stopPropagation(); onSelect(i.id); }} onKeyDown=${(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(i.id); } }}>
+          ${i.priority === 'Critical' && html`<circle className="pulse" r="11" fill=${col} opacity=".4"/>`}
+          <circle className="selring" r="19" fill="none" stroke="var(--cyan)" strokeWidth="1.6" strokeDasharray="3 3" opacity=${isSel ? 1 : 0}/>
+          <g className="dotc"><circle r="12" fill=${col} stroke="var(--map-bg)" strokeWidth="2.4"/><svg x="-7" y="-7" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke=${i.priority === 'High' ? '#2A1A00' : '#071218'} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML=${{ __html: ICONS[CATS[i.cat].icon] }}/></g>
+        </g>`;
+      })}
+    </svg>
+    ${!compact && html`
+      <div className="m-badge"><${Icon} n="info" /> Illustrative Amman City Map — Demo Data</div>
+      <div className="m-ctrl">
+        <button type="button" aria-label="Zoom in" title="Zoom in" onClick=${() => zoom(0.5)} disabled=${z >= 3}><${Icon} n="plus" /></button>
+        <button type="button" aria-label="Zoom out" title="Zoom out" onClick=${() => zoom(-0.5)} disabled=${z <= 1}><${Icon} n="minus" /></button>
+        <button type="button" aria-label="Recenter map" title="Recenter" onClick=${() => { setZ(1); setC([MW / 2, MH / 2]); }}><${Icon} n="target" /></button>
+      </div>
+      <div className="m-legend">
+        <h4>LEGEND</h4>
+        ${[['Critical', 'var(--red)'], ['High', 'var(--amber)'], ['Normal', 'var(--cyan)']].map(([k, col]) => html`<button type="button" key=${k} className=${'lg' + (lv[k] ? '' : ' off')} style=${{ '--c': col }} aria-pressed=${lv[k]} onClick=${() => setLv({ ...lv, [k]: !lv[k] })}><i></i>${k} incident</button>`)}
+        <div className="lg"><span className="sq" style=${{ transform: 'rotate(45deg) scale(.8)' }}></span>Landmark</div>
+        <div className="lg"><span className="ring"></span>Numbered circle</div>
+      </div>
+      <div className="m-nav">
+        <div className="m-scale"><i></i><span>Schematic scale</span></div>
+        <svg className="m-north" viewBox="0 0 22 30" aria-label="North"><path d="M11 3 17 20 11 16.5 5 20Z" fill="var(--cyan)"/><text x="11" y="29" textAnchor="middle" style=${{ font: '700 8px Inter,sans-serif', fill: 'var(--mut)' }}>N</text></svg>
+      </div>
+      ${sel && html`<div className="m-pop" role="dialog" aria-label="Incident information">
+        <div className="top-row"><div><span className="id">${sel.id}</span><h4>${sel.title}</h4></div><button type="button" className="x-btn" aria-label="Close" onClick=${() => onSelect(null)}><${Icon} n="x" /></button></div>
+        <dl>
+          <dt>Type</dt><dd>${CATS[sel.cat].label}</dd>
+          <dt>Neighborhood</dt><dd>${DMAP[sel.district].en}</dd>
+          <dt>Priority</dt><dd><${PriPill} p=${sel.priority} /></dd>
+          <dt>Status</dt><dd><${StatPill} s=${sel.status} /></dd>
+          <dt>Assigned team</dt><dd>${sel.team ? TMAP[sel.team].name : 'Unassigned'}</dd>
+        </dl>
+        <button type="button" className="btn primary sm" style=${{ width: '100%' }} onClick=${() => onOpen(sel.id)}>View full details <${Icon} n="arrow" /></button>
+      </div>`}
+    `}
+  </div>`;
+}
+/* ---------- shell ---------- */
+const NAV = [
+  { id: 'overview', label: 'Overview', icon: 'overview', title: 'Overview' },
+  { id: 'incidents', label: 'Live Incidents', icon: 'incidents', title: 'Live Incidents' },
+  { id: 'teams', label: 'Response Teams', icon: 'teams', title: 'Response Teams' },
+  { id: 'resources', label: 'Resources', icon: 'box', title: 'Resources' },
+  { id: 'intel', label: 'City Intelligence', icon: 'city', title: 'City Intelligence' },
+  { id: 'analytics', label: 'Analytics', icon: 'chart', title: 'Analytics' },
+];
+
+function Sidebar({ page, go, open, activeCount }) {
+  return html`<aside className=${'side' + (open ? ' open' : '')} aria-label="Primary">
+    <div className="brand"><${Logo} /><div><b>NEXUS AMMAN</b><span>CITY OPERATIONS</span></div></div>
+    <div className="nav-label">WORKSPACE</div>
+    <nav className="nav">${NAV.map((n) => html`<button key=${n.id} type="button" className=${'nav-item' + (page === n.id ? ' active' : '')} aria-current=${page === n.id ? 'page' : undefined} onClick=${() => go(n.id)}><${Icon} n=${n.icon} />${n.label}${n.id === 'incidents' && html`<span className="cnt num">${activeCount}</span>`}</button>`)}</nav>
+    <div className="side-foot">
+      <div className="sys">
+        <div className="sys-row"><span className="dot"></span>System status<b>Nominal</b></div>
+        <div className="sys-row"><span className="dot amber"></span>Environment<b>Demo</b></div>
+      </div>
+      <div className="me"><span className="avatar">OA</span><div><b>Operations Administrator</b><small>Demo account</small></div></div>
+    </div>
+  </aside>`;
+}
+
+function Header({ page, go, query, setQuery, onMenu, notices, readSet, markAllRead, onOpenIncident, onAbout, onReset }) {
+  const [menu, setMenu] = useState(null);
+  const ref = useRef(null);
+  useEffect(() => {
+    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setMenu(null); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, []);
+  const unread = notices.filter((n) => !readSet.has(n.id)).length;
+  const cur = NAV.find((n) => n.id === page);
+  const date = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  return html`<header className="top" ref=${ref}>
+    <button type="button" className="icon-btn hamb" aria-label="Open navigation" onClick=${onMenu}><${Icon} n="menu" /></button>
+    <div>
+      <div className="crumbs"><b>NEXUS AMMAN</b><${Icon} n="right" size=${11} /><b>Operations</b><${Icon} n="right" size=${11} /><span>${cur.label}</span></div>
+      <h2>${cur.title}</h2>
+    </div>
+    <span className="demo-badge">DEMO ENVIRONMENT</span>
+    <div className="top-spacer"></div>
+    <label className="search"><${Icon} n="search" /><input id="global-search" type="search" placeholder="Search incidents, districts, teams" value=${query} aria-label="Search incidents" onChange=${(e) => { setQuery(e.target.value); if (e.target.value && page !== 'incidents') go('incidents'); }} /></label>
+    <span className="date">${date}</span>
+    <div className="host">
+      <button type="button" className="icon-btn" aria-label=${'Notifications, ' + unread + ' unread'} aria-expanded=${menu === 'n'} onClick=${() => setMenu(menu === 'n' ? null : 'n')}><${Icon} n="bell" />${unread > 0 && html`<span className="badge num">${unread}</span>`}</button>
+      ${menu === 'n' && html`<div className="menu" role="menu">
+        <div className="menu-h">Alerts<button type="button" className="btn sm" onClick=${markAllRead} disabled=${unread === 0}>Mark all read</button></div>
+        <div className="menu-list">${notices.length === 0 ? html`<div className="empty">No critical or high-priority alerts.</div>` : notices.map((n) => html`<button key=${n.id} type="button" className="menu-item" onClick=${() => { onOpenIncident(n.id); setMenu(null); }}><span className=${'unread' + (readSet.has(n.id) ? ' read' : '')}></span><span><b>${n.title}</b><small>${n.id} · ${DMAP[n.district].en} · ${n.priority}</small></span></button>`)}</div>
+      </div>`}
+    </div>
+    <div className="host">
+      <button type="button" className="avatar" aria-label="Profile menu" aria-expanded=${menu === 'p'} onClick=${() => setMenu(menu === 'p' ? null : 'p')}>OA</button>
+      ${menu === 'p' && html`<div className="menu narrow" role="menu">
+        <div className="menu-h" style=${{ display: 'block' }}>Operations Administrator<small style=${{ display: 'block', color: 'var(--mut)', fontWeight: 400 }}>Demo account</small></div>
+        <button type="button" className="menu-link" onClick=${() => { setMenu(null); onAbout(); }}><${Icon} n="info" />About this demo</button>
+        <button type="button" className="menu-link" onClick=${() => { setMenu(null); onReset(); }}><${Icon} n="refresh" />Reset demo data</button>
+      </div>`}
+    </div>
+  </header>`;
+}
+
+function Drawer({ id, onClose, onLocate }) {
+  const { incidents, now, advance, assignTeam } = useContext(Ctx);
+  const [tab, setTab] = useState('details');
+  const inc = incidents.find((i) => i.id === id);
+  useEffect(() => setTab('details'), [id]);
+  if (!inc) return null;
+  const idx = STATUSES.indexOf(inc.status);
+  const want = CATS[inc.cat].team;
+  const states = TEAMS.map((t) => ({ t, st: teamState(t, incidents) }));
+  const free = (x) => x.st.status === 'Available' || x.t.id === inc.team;
+  const rec = states.filter((x) => x.t.cat === want && free(x));
+  const other = states.filter((x) => x.t.cat !== want && free(x));
+  const busy = states.filter((x) => !free(x));
+  const nextLabel = inc.status === 'Reported' ? 'Dispatch team' : inc.status === 'Dispatched' ? 'Mark on scene' : inc.status === 'On Scene' ? 'Mark resolved' : 'Resolved';
+  return html`<${Fragment}>
+    <div className="overlay" onClick=${onClose}></div>
+    <aside className="drawer" role="dialog" aria-modal="true" aria-label=${'Incident ' + inc.id}>
+      <div className="drawer-h">
+        <div className="row"><span className="tag">${inc.id} · FICTIONAL DEMO RECORD</span><button type="button" className="x-btn" aria-label="Close details" onClick=${onClose}><${Icon} n="x" /></button></div>
+        <h3>${inc.title}</h3>
+        <div style=${{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><${PriPill} p=${inc.priority} /><${StatPill} s=${inc.status} /><span className="pill" style=${{ '--c': CATS[inc.cat].color }}>${CATS[inc.cat].label}</span></div>
+      </div>
+      <div className="tabs" role="tablist">${[['details', 'Details'], ['timeline', 'Activity timeline']].map(([k, l]) => html`<button key=${k} type="button" role="tab" aria-selected=${tab === k} className=${tab === k ? 'on' : ''} onClick=${() => setTab(k)}>${l}</button>`)}</div>
+      <div className="drawer-b">
+        ${tab === 'details' ? html`<${Fragment}>
+          <div className="steps" aria-label="Progress">${STATUSES.map((s, i) => html`<div key=${s} className=${i <= idx ? 'done' : ''}><i></i>${s}</div>`)}</div>
+          <dl className="kv">
+            <div><dt>Incident reference</dt><dd className="num">${inc.id}</dd></div>
+            <div><dt>Incident type</dt><dd>${CATS[inc.cat].label}</dd></div>
+            <div><dt>District</dt><dd>${DMAP[inc.district].en} <span className="ar" style=${{ color: 'var(--mut)', fontWeight: 400 }}>${DMAP[inc.district].ar}</span></dd></div>
+            <div><dt>Reported</dt><dd className="num">${fmtTime(inc.t0)} · ${rel(inc.t0, now)}</dd></div>
+            <div className="wide"><dt>Illustrative location</dt><dd>${inc.location}, ${DMAP[inc.district].en}<small style=${{ display: 'block', color: 'var(--mut)', fontWeight: 400, fontSize: 12 }}>Schematic position only. Not a real address.</small></dd></div>
+            <div className="wide"><dt>Description</dt><dd style=${{ fontWeight: 400 }}>${inc.desc}</dd></div>
+          </dl>
+          <label className="lbl" htmlFor="assign-team">Assigned team
+            <select id="assign-team" className="select full" value=${inc.team || ''} disabled=${inc.status === 'Resolved'} onChange=${(e) => e.target.value && assignTeam(inc.id, e.target.value)}>
+              <option value="" disabled>${inc.team ? '' : 'Select a team'}</option>
+              <optgroup label=${'Recommended · ' + TEAMCATS[want].label}>${rec.map((x) => html`<option key=${x.t.id} value=${x.t.id}>${x.t.name} (${x.t.id}) · ${x.st.status === 'Available' ? 'Available' : 'Current'}</option>`)}</optgroup>
+              ${other.length > 0 && html`<optgroup label="Other available teams">${other.map((x) => html`<option key=${x.t.id} value=${x.t.id}>${x.t.name} (${x.t.id})</option>`)}</optgroup>`}
+              <optgroup label="Currently committed">${busy.map((x) => html`<option key=${x.t.id} value=${x.t.id} disabled>${x.t.name} · ${x.st.status}</option>`)}</optgroup>
+            </select>
+          </label>
+        <//>` : html`<ul className="tl">${inc.tl.slice().sort((a, b) => b.t - a.t).map((e, i) => html`<li key=${i}><b>${e.text}</b><small className="num">${fmtTime(e.t)} · ${rel(e.t, now)}</small></li>`)}</ul>`}
+      </div>
+      <div className="drawer-f">
+        <button type="button" className="btn primary" disabled=${inc.status === 'Resolved'} onClick=${() => advance(inc.id)}><${Icon} n=${inc.status === 'On Scene' ? 'check' : 'send'} />${nextLabel}</button>
+        <button type="button" className="btn" onClick=${() => onLocate(inc.id)}><${Icon} n="pin" />Show on map</button>
+      </div>
+    </aside>
+  <//>`;
+}
+
+function CreateModal({ onClose }) {
+  const { createIncident } = useContext(Ctx);
+  const [f, setF] = useState({ cat: 'traffic', priority: 'Medium', district: 'abdali', location: '', desc: '' });
+  const [err, setErr] = useState({});
+  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
+  const submit = (e) => {
+    e.preventDefault();
+    const er = {};
+    if (f.location.trim().length < 3) er.location = 'Enter an illustrative location of at least 3 characters.';
+    if (f.desc.trim().length < 10) er.desc = 'Describe the incident in at least 10 characters.';
+    setErr(er);
+    if (Object.keys(er).length) return;
+    createIncident({ ...f, location: f.location.trim(), desc: f.desc.trim() });
+    onClose();
+  };
+  return html`<${Fragment}>
+    <div className="overlay" onClick=${onClose}></div>
+    <form className="modal" role="dialog" aria-modal="true" aria-labelledby="cm-t" onSubmit=${submit} noValidate>
+      <div className="modal-h"><div><h3 id="cm-t">Create Demo Incident</h3><p>Adds a fictional record to this prototype only. Nothing is sent anywhere.</p></div><button type="button" className="x-btn" aria-label="Close" onClick=${onClose}><${Icon} n="x" /></button></div>
+      <div className="modal-b">
+        <div className="two">
+          <label className="lbl" htmlFor="f-cat">Category<select id="f-cat" className="select full" value=${f.cat} onChange=${set('cat')}>${Object.entries(CATS).map(([k, c]) => html`<option key=${k} value=${k}>${c.label}</option>`)}</select></label>
+          <label className="lbl" htmlFor="f-pri">Priority<select id="f-pri" className="select full" value=${f.priority} onChange=${set('priority')}>${PRIORITIES.map((p) => html`<option key=${p}>${p}</option>`)}</select></label>
+        </div>
+        <label className="lbl" htmlFor="f-dist">District<select id="f-dist" className="select full" value=${f.district} onChange=${set('district')}>${DISTRICTS.map((d) => html`<option key=${d.id} value=${d.id}>${d.en}</option>`)}</select></label>
+        <label className="lbl" htmlFor="f-loc">Illustrative location<input id="f-loc" className=${'input' + (err.location ? ' invalid' : '')} value=${f.location} onChange=${set('location')} placeholder="For example: 5th Circle" aria-invalid=${!!err.location} />${err.location && html`<span className="err">${err.location}</span>`}</label>
+        <label className="lbl" htmlFor="f-desc">Description<textarea id="f-desc" className=${'textarea' + (err.desc ? ' invalid' : '')} value=${f.desc} onChange=${set('desc')} placeholder="What was reported?" aria-invalid=${!!err.desc}></textarea>${err.desc && html`<span className="err">${err.desc}</span>`}</label>
+      </div>
+      <div className="modal-f"><button type="button" className="btn" onClick=${onClose}>Cancel</button><button type="submit" className="btn primary"><${Icon} n="plus" />Create incident</button></div>
+    </form>
+  <//>`;
+}
+
+function DispatchModal({ teamId, onClose }) {
+  const { incidents, assignTeam } = useContext(Ctx);
+  const team = TMAP[teamId];
+  const open = incidents.filter((i) => i.status !== 'Resolved' && !i.team).sort((a, b) => PRANK[a.priority] - PRANK[b.priority]);
+  const rec = open.filter((i) => CATS[i.cat].team === team.cat);
+  const [sel, setSel] = useState((rec[0] || open[0] || {}).id || '');
+  return html`<${Fragment}>
+    <div className="overlay" onClick=${onClose}></div>
+    <div className="modal" role="dialog" aria-modal="true" aria-labelledby="dm-t">
+      <div className="modal-h"><div><h3 id="dm-t">Dispatch ${team.name}</h3><p>${TEAMCATS[team.cat].label} · ${team.id}</p></div><button type="button" className="x-btn" aria-label="Close" onClick=${onClose}><${Icon} n="x" /></button></div>
+      <div className="modal-b">
+        ${open.length === 0 ? html`<div className="empty"><b>No unassigned incidents</b>Create a demo incident first, then dispatch a team.</div>` : html`<label className="lbl" htmlFor="dm-inc">Unassigned incident<select id="dm-inc" className="select full" value=${sel} onChange=${(e) => setSel(e.target.value)}>${open.map((i) => html`<option key=${i.id} value=${i.id}>${i.id} · ${i.title} · ${DMAP[i.district].en} · ${i.priority}${CATS[i.cat].team === team.cat ? ' (matching)' : ''}</option>`)}</select></label>`}
+      </div>
+      <div className="modal-f"><button type="button" className="btn" onClick=${onClose}>Cancel</button><button type="button" className="btn primary" disabled=${!sel} onClick=${() => { assignTeam(sel, teamId); onClose(); }}><${Icon} n="send" />Dispatch team</button></div>
+    </div>
+  <//>`;
+}
+
+function AboutModal({ onClose }) {
+  return html`<${Fragment}>
+    <div className="overlay" onClick=${onClose}></div>
+    <div className="modal" role="dialog" aria-modal="true" aria-labelledby="ab-t">
+      <div className="modal-h"><div><h3 id="ab-t">About this demo</h3><p>NEXUS AMMAN · One City. One Connected Response.</p></div><button type="button" className="x-btn" aria-label="Close" onClick=${onClose}><${Icon} n="x" /></button></div>
+      <div className="modal-b" style=${{ color: 'var(--mut)' }}>
+        <p>NEXUS AMMAN is a conceptual prototype showing how incidents, response teams and resources could be coordinated in one command center.</p>
+        <p>All incidents, teams, resources and figures are fictional demonstration data. This prototype has no connection to Jordanian emergency services, police, hospitals or government databases.</p>
+        <p>The map is an illustrative schematic inspired by Amman's districts. Road alignments, positions and scale are not geographically accurate.</p>
+      </div>
+      <div className="modal-f"><button type="button" className="btn primary" onClick=${onClose}>Close</button></div>
+    </div>
+  <//>`;
+}
+
+function Toasts({ list }) {
+  return html`<div className="toasts" role="status" aria-live="polite">${list.map((t) => html`<div key=${t.id} className=${'toast' + (t.warn ? ' warn' : '')}><${Icon} n=${t.warn ? 'info' : 'check'} />${t.msg}</div>`)}</div>`;
+}
+/* ---------- pages ---------- */
+const DemoNote = () => html`<div className="footer"><${Icon} n="info" />All incidents, teams, resources and figures are fictional demonstration data. No connection to real emergency services.</div>`;
+function Head({ title, sub, children, loc }) {
+  return html`<div className="page-head"><div>${loc && html`<div className="loc"><${Icon} n="pin" />AMMAN, JORDAN</div>`}<h1>${title}</h1><p>${sub}</p></div><div className="actions">${children}</div></div>`;
+}
+const CreateBtn = () => { const { openCreate } = useContext(Ctx); return html`<button type="button" className="btn primary" onClick=${openCreate}><${Icon} n="plus" />Create Demo Incident</button>`; };
+
+function IncidentTable({ rows, now, onOpen, showTeam }) {
+  return html`<div className="tbl-wrap"><table className="tbl">
+    <thead><tr><th>Incident ID</th><th>Incident Type</th><th>Location</th><th>Priority</th><th>Reported Time</th><th>Status</th>${showTeam && html`<th>Team</th>`}</tr></thead>
+    <tbody>${rows.map((i) => html`<tr key=${i.id} tabIndex="0" onClick=${() => onOpen(i.id)} onKeyDown=${(e) => { if (e.key === 'Enter') onOpen(i.id); }}>
+      <td className="id">${i.id}</td>
+      <td><div className="tcell"><${CatIcon} cat=${i.cat} /><div><b style=${{ fontWeight: 600 }}>${i.title}</b><small>${CATS[i.cat].label}</small></div></div></td>
+      <td>${i.location}<small>${DMAP[i.district].en}</small></td>
+      <td><${PriPill} p=${i.priority} /></td>
+      <td className="num">${fmtTime(i.t0)}<small>${rel(i.t0, now)}</small></td>
+      <td><${StatPill} s=${i.status} /></td>
+      ${showTeam && html`<td>${i.team ? TMAP[i.team].name : html`<span style=${{ color: 'var(--dim)' }}>Unassigned</span>`}</td>`}
+    </tr>`)}</tbody></table></div>`;
+}
+
+function Overview() {
+  const { incidents, now, openIncident, go, resolvedToday, mapSel, setMapSel } = useContext(Ctx);
+  const active = incidents.filter((i) => i.status !== 'Resolved');
+  const pc = countBy(active, (i) => i.priority);
+  const events = useMemo(() => incidents.flatMap((i) => i.tl.map((e) => ({ ...e, inc: i }))).sort((a, b) => b.t - a.t).slice(0, 10), [incidents]);
+  const recent = incidents.slice().sort((a, b) => b.t0 - a.t0).slice(0, 8);
+  return html`<div className="page">
+    <${Head} loc=${true} title="Amman Operations Overview" sub="Unified visibility across the city."><${CreateBtn} /><//>
+    <div className="stats">
+      <${StatCard} icon="incidents" color="var(--red)" label="Active Incidents" value=${active.length} sub="Across monitored districts" spark=${[18, 21, 19, 24, 22, 26, active.length]} />
+      <${StatCard} icon="teams" color="var(--cyan)" label="Response Teams" value=${TEAMS.length} sub="Available and assigned" spark=${[15, 16, 16, 17, 17, 18, 18]} />
+      <${StatCard} icon="box" color="var(--green)" label="Resources Available" value=${Math.round((RES_AVAIL / RES_TOTAL) * 100) + '%'} sub="Illustrative availability" spark=${[82, 84, 83, 87, 85, 86, 86]} />
+      <${StatCard} icon="check" color="var(--blue)" label="Resolved Today" value=${resolvedToday} sub="Demo daily activity" spark=${[12, 18, 22, 27, 31, 34, resolvedToday]} />
+    </div>
+    <div className="grid-map">
+      <${AmmanMap} uid="ov" incidents=${incidents} selectedId=${mapSel} onSelect=${setMapSel} onOpen=${openIncident} />
+      <div className="col-fill"><div className="inner">
+        <div className="card"><div className="card-h"><h3>Active by priority</h3><span className="tag">${active.length} OPEN</span></div><div className="card-b" style=${{ paddingTop: 0 }}>
+          <div className="mix" role="img" aria-label="Active incidents by priority">${PRIORITIES.map((p) => html`<i key=${p} style=${{ flex: pc[p] || 0.0001, background: p === 'Critical' ? 'var(--red)' : p === 'High' ? 'var(--amber)' : p === 'Medium' ? 'var(--cyan)' : 'var(--blue)' }}></i>`)}</div>
+          <div className="mix-leg">${PRIORITIES.map((p) => html`<div key=${p}><b className="num">${pc[p] || 0}</b>${p}</div>`)}</div>
+        </div></div>
+        <div className="card feed"><div className="card-h" style=${{ paddingBottom: 6 }}><h3>Live activity<small>Latest updates across all incidents</small></h3><span className="tag live">LIVE · DEMO</span></div>
+          <div className="feed-list">${events.map((e, k) => html`<button key=${e.inc.id + k} type="button" className="ev" onClick=${() => openIncident(e.inc.id)}><span className="ev-ic" style=${{ '--c': pColor(e.inc.priority) }}><${Icon} n=${CATS[e.inc.cat].icon} /></span><span><span className="ev-t">${e.text}</span><small>${e.inc.id} · ${DMAP[e.inc.district].en} · ${rel(e.t, now)}</small></span></button>`)}</div>
+        </div>
+      </div></div>
+    </div>
+    <div className="card">
+      <div className="card-h"><h3>Recent incidents<small>Fictional demonstration records</small></h3><button type="button" className="btn sm" onClick=${() => go('incidents')}>View all<${Icon} n="arrow" /></button></div>
+      <div style=${{ paddingTop: 8 }}><${IncidentTable} rows=${recent} now=${now} onOpen=${openIncident} /></div>
+    </div>
+    <${DemoNote} />
+  </div>`;
+}
+
+function IncidentsPage() {
+  const { incidents, now, query, setQuery, openIncident } = useContext(Ctx);
+  const [pri, setPri] = useState('All');
+  const [st, setSt] = useState('Active');
+  const [cat, setCat] = useState('all');
+  const [sort, setSort] = useState('newest');
+  const q = query.trim().toLowerCase();
+  const rows = useMemo(() => {
+    let r = incidents.filter((i) => {
+      if (pri !== 'All' && i.priority !== pri) return false;
+      if (st === 'Active' ? i.status === 'Resolved' : st !== 'All' && i.status !== st) return false;
+      if (cat !== 'all' && i.cat !== cat) return false;
+      if (q) {
+        const hay = [i.id, i.title, i.location, DMAP[i.district].en, DMAP[i.district].ar, CATS[i.cat].label, i.team ? TMAP[i.team].name : '', i.desc, i.priority, i.status].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+    const cmp = { newest: (a, b) => b.t0 - a.t0, oldest: (a, b) => a.t0 - b.t0, priority: (a, b) => PRANK[a.priority] - PRANK[b.priority] || b.t0 - a.t0, district: (a, b) => DMAP[a.district].en.localeCompare(DMAP[b.district].en), status: (a, b) => STATUSES.indexOf(a.status) - STATUSES.indexOf(b.status) };
+    return r.sort(cmp[sort]);
+  }, [incidents, pri, st, cat, sort, q]);
+  const dirty = pri !== 'All' || st !== 'Active' || cat !== 'all' || q;
+  return html`<div className="page">
+    <${Head} title="Live Incidents" sub="Search, filter and manage fictional incident records across Amman."><${CreateBtn} /><//>
+    <div className="card">
+      <div className="toolbar">
+        <label className="search"><${Icon} n="search" /><input id="inc-search" type="search" placeholder="Search incidents" value=${query} onChange=${(e) => setQuery(e.target.value)} aria-label="Search incidents" /></label>
+        <${Seg} label="Priority" value=${pri} onChange=${setPri} options=${['All', ...PRIORITIES].map((p) => ({ v: p, l: p }))} />
+        <select className="select" aria-label="Status" value=${st} onChange=${(e) => setSt(e.target.value)}><option value="Active">Status: Active</option><option value="All">Status: All</option>${STATUSES.map((s) => html`<option key=${s} value=${s}>Status: ${s}</option>`)}</select>
+        <select className="select" aria-label="Category" value=${cat} onChange=${(e) => setCat(e.target.value)}><option value="all">Category: All</option>${Object.entries(CATS).map(([k, c]) => html`<option key=${k} value=${k}>${c.label}</option>`)}</select>
+        <select className="select" aria-label="Sort by" value=${sort} onChange=${(e) => setSort(e.target.value)}><option value="newest">Sort: Newest first</option><option value="oldest">Sort: Oldest first</option><option value="priority">Sort: Priority</option><option value="district">Sort: District</option><option value="status">Sort: Status</option></select>
+        ${dirty && html`<button type="button" className="btn sm" onClick=${() => { setPri('All'); setSt('Active'); setCat('all'); setQuery(''); }}>Clear filters</button>`}
+        <span className="count num">${rows.length} of ${incidents.length} records</span>
+      </div>
+      ${rows.length ? html`<${IncidentTable} rows=${rows} now=${now} onOpen=${openIncident} showTeam=${true} />` : html`<div className="empty"><b>No incidents match these filters</b>Try clearing a filter or searching a different term.</div>`}
+    </div>
+    <${DemoNote} />
+  </div>`;
+}
+
+function TeamsPage() {
+  const { incidents, openIncident } = useContext(Ctx);
+  const [sf, setSf] = useState('All');
+  const [cf, setCf] = useState('all');
+  const [dispatch, setDispatch] = useState(null);
+  const rows = TEAMS.map((t) => ({ t, st: teamState(t, incidents) }));
+  const sc = countBy(rows, (r) => r.st.status);
+  const shown = rows.filter((r) => (sf === 'All' || r.st.status === sf) && (cf === 'all' || r.t.cat === cf));
+  const TS = ['Available', 'Assigned', 'En Route', 'Busy'];
+  const dist = DISTRICTS.map((d) => ({ d, c: countBy(rows.filter((r) => r.st.district === d.id), (r) => r.st.status), n: rows.filter((r) => r.st.district === d.id).length }));
+  const col = { Available: 'var(--green)', Assigned: 'var(--blue)', 'En Route': 'var(--cyan)', Busy: 'var(--amber)' };
+  return html`<div className="page">
+    <${Head} title="Response Teams" sub="Fictional teams, live status and district coverage."><${CreateBtn} /><//>
+    <div style=${{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+      <${Seg} label="Status" value=${sf} onChange=${setSf} options=${[{ v: 'All', l: 'All ' + TEAMS.length }, ...TS.map((s) => ({ v: s, l: s + ' ' + (sc[s] || 0) }))]} />
+      <${Seg} label="Category" value=${cf} onChange=${setCf} options=${[{ v: 'all', l: 'All categories' }, ...Object.entries(TEAMCATS).map(([k, c]) => ({ v: k, l: c.label }))]} />
+    </div>
+    <div className="grid-intel" style=${{ gridTemplateColumns: 'minmax(0,1.9fr) minmax(280px,1fr)', alignItems: 'start' }}>
+      ${shown.length ? html`<div className="team-grid">${shown.map(({ t, st }) => html`<div key=${t.id} className="team">
+        <div className="team-top"><span className="chip" style=${{ '--c': TEAMCATS[t.cat].color }}><${Icon} n=${TEAMCATS[t.cat].icon} size=${16} /></span><div style=${{ flex: 1, minWidth: 0 }}><b>${t.name}</b><small>${t.id} · ${TEAMCATS[t.cat].label}</small></div><${TeamPill} s=${st.status} /></div>
+        <dl><dt>District</dt><dd>${DMAP[st.district].en}</dd><dt>Current task</dt><dd title=${st.inc ? st.inc.title : 'Standby'}>${st.inc ? st.inc.id + ' · ' + st.inc.title : 'Standby'}</dd></dl>
+        <div className="avail"><div className="track"><div className="fill" style=${{ width: AVAIL_BAR[st.status] + '%', '--c': col[st.status] }}></div></div><span>${AVAIL_TXT[st.status]}</span></div>
+        ${st.inc ? html`<button type="button" className="btn sm" onClick=${() => openIncident(st.inc.id)}>View incident</button>` : html`<button type="button" className="btn sm primary" onClick=${() => setDispatch(t.id)}><${Icon} n="send" />Dispatch</button>`}
+      </div>`)}</div>` : html`<div className="card empty"><b>No teams match</b>Adjust the status or category filter.</div>`}
+      <div className="card"><div className="card-h"><h3>District distribution<small>Teams by current district</small></h3></div><div className="card-b">
+        <div className="leg-row">${TS.map((s) => html`<span key=${s} style=${{ '--c': col[s] }}><i></i>${s}</span>`)}</div>
+        ${dist.map(({ d, c, n }) => html`<div className="dist-row" key=${d.id}><span>${d.en}</span><div className="stack">${TS.map((s) => (c[s] ? html`<i key=${s} style=${{ flex: c[s], '--c': col[s] }}></i>` : null))}</div><b className="num">${n}</b></div>`)}
+      </div></div>
+    </div>
+    ${dispatch && html`<${DispatchModal} teamId=${dispatch} onClose=${() => setDispatch(null)} />`}
+    <${DemoNote} />
+  </div>`;
+}
+
+function ResourcesPage() {
+  const [f, setF] = useState('all');
+  const list = RES.filter((c) => f === 'all' || c.id === f);
+  const pct = Math.round((RES_AVAIL / RES_TOTAL) * 100);
+  return html`<div className="page">
+    <${Head} title="Resources" sub="Illustrative inventory and availability across the city."><//>
+    <div className="grid-intel">
+      <div className="card"><div className="card-h"><h3>Overall availability<small>${RES_AVAIL} of ${RES_TOTAL} units available · illustrative</small></h3><span className="tag">DEMO DATA</span></div><div className="card-b">
+        <${Donut} big=${pct + '%'} small="AVAILABLE" parts=${RES.map((c) => ({ label: c.label, value: c.avail, color: c.color }))} />
+      </div></div>
+      <div className="card"><div className="card-h"><h3>By category</h3></div><div className="card-b"><${HBars} unit="%" max=${100} rows=${RES.map((c) => ({ label: c.label, value: Math.round((c.avail / c.total) * 100), color: c.color }))} /></div></div>
+    </div>
+    <${Seg} label="Resource category" value=${f} onChange=${setF} options=${[{ v: 'all', l: 'All categories' }, ...RES.map((c) => ({ v: c.id, l: c.label }))]} />
+    <div className="grid2">${list.map((c) => html`<div key=${c.id} className="card res-card">
+      <div className="res-top"><span className="chip" style=${{ '--c': c.color }}><${Icon} n=${c.icon} size=${16} /></span><div style=${{ flex: 1 }}><h3>${c.label}</h3><small>${Math.round((c.avail / c.total) * 100)}% available</small></div></div>
+      <div className="track"><div className="fill" style=${{ width: (c.avail / c.total) * 100 + '%', '--c': c.color }}></div></div>
+      <div className="res-nums"><div><small>Total</small><b>${c.total}</b></div><div><small>Available</small><b>${c.avail}</b></div><div><small>Assigned</small><b>${c.total - c.avail}</b></div></div>
+      <div className="res-items">${c.items.map(([n, t, a]) => html`<div className="res-item" key=${n}><span title=${n}>${n}</span><div className="track" style=${{ height: 6 }}><div className="fill" style=${{ width: (a / t) * 100 + '%', '--c': c.color }}></div></div><b>${a}/${t}</b></div>`)}</div>
+    </div>`)}</div>
+    <${DemoNote} />
+  </div>`;
+}
+
+const hourly = (id, base) => { const r = rng(id.split('').reduce((s, ch) => s * 31 + ch.charCodeAt(0), 7)); return Array.from({ length: 24 }, (_, h) => Math.round(base + 4 * (Math.sin(((h - 7) / 24) * Math.PI * 2) + 1) + r() * 3)); };
+const HOURS = Array.from({ length: 24 }, (_, h) => String(h).padStart(2, '0') + ':00');
+
+function IntelPage() {
+  const { incidents } = useContext(Ctx);
+  const [dsel, setDsel] = useState('abdali');
+  const active = incidents.filter((i) => i.status !== 'Resolved');
+  const byD = countBy(active, (i) => i.district);
+  const byC = countBy(active, (i) => i.cat);
+  const d = DMAP[dsel];
+  const di = active.filter((i) => i.district === dsel);
+  const top = Object.entries(countBy(di, (i) => i.cat)).sort((a, b) => b[1] - a[1])[0];
+  const teamsHere = TEAMS.filter((t) => teamState(t, incidents).district === dsel).length;
+  return html`<div className="page">
+    <${Head} loc=${true} title="City Intelligence" sub="District-level view of demo activity across Amman."><//>
+    <div className="grid-intel">
+      <div style=${{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <${AmmanMap} uid="in" compact=${true} incidents=${[]} heat=${byD} selDistrict=${dsel} onDistrict=${setDsel} />
+        <div className="note"><${Icon} n="info" />Illustrative district map. Shading and badges show demo active incidents per district. Select a district.</div>
+      </div>
+      <div className="card"><div className="card-h"><h3><span className="ar" style=${{ color: 'var(--mut)', fontWeight: 400, marginInlineEnd: 8 }}>${d.ar}</span>${d.full || d.en}<small>${d.about}</small></h3><span className="tag">DEMO DATA</span></div><div className="card-b">
+        <div className="facts"><div><small>Active</small><b>${di.length}</b></div><div><small>Teams</small><b>${teamsHere}</b></div><div><small>Top category</small><b style=${{ fontSize: 13, lineHeight: '26px' }}>${top ? CATS[top[0]].label : 'None'}</b></div></div>
+        <div style=${{ marginTop: 18 }}><div className="leg-inline" style=${{ marginBottom: 6 }}><span style=${{ '--c': 'var(--cyan)' }}><i></i>Illustrative hourly activity (demo)</span></div>
+          <${LineChart} labels=${HOURS} height=${190} series=${[{ name: d.en, color: 'var(--cyan)', values: hourly(dsel, 2 + di.length * 0.6) }]} /></div>
+      </div></div>
+    </div>
+    <div className="dgrid">${DISTRICTS.map((x) => html`<button key=${x.id} type="button" className=${'dcard' + (x.id === dsel ? ' on' : '')} aria-pressed=${x.id === dsel} onClick=${() => setDsel(x.id)}><div><b>${x.en}</b><span className="ar">${x.ar}</span></div><div className="row"><span className="n">${byD[x.id] || 0}</span><small>active</small></div></button>`)}</div>
+    <div className="grid2">
+      <div className="card"><div className="card-h"><h3>Incident distribution by district<small>Illustrative · demo data</small></h3></div><div className="card-b"><${HBars} rows=${DISTRICTS.map((x) => ({ label: x.en, value: byD[x.id] || 0 })).sort((a, b) => b.value - a.value)} /></div></div>
+      <div className="card"><div className="card-h"><h3>Category breakdown<small>Active demo incidents</small></h3></div><div className="card-b"><${Donut} big=${active.length} small="ACTIVE" parts=${Object.entries(CATS).map(([k, c]) => ({ label: c.label, value: byC[k] || 0, color: c.color }))} /></div></div>
+    </div>
+    <${DemoNote} />
+  </div>`;
+}
+
+function AnalyticsPage() {
+  const { incidents } = useContext(Ctx);
+  const [range, setRange] = useState('24h');
+  const active = incidents.filter((i) => i.status !== 'Resolved');
+  const byC = countBy(incidents, (i) => i.cat), byD = countBy(incidents, (i) => i.district), byS = countBy(incidents, (i) => i.status);
+  const trend = useMemo(() => {
+    const cfg = { '24h': [24, (i) => String(i).padStart(2, '0') + ':00', 5], '7d': [7, (i) => ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed'][i], 38], '30d': [30, (i) => 'D' + (i + 1), 34] }[range];
+    const r = rng(range.length * 97 + 5);
+    const rep = Array.from({ length: cfg[0] }, (_, i) => Math.round(cfg[2] + cfg[2] * 0.6 * Math.sin((i / cfg[0]) * Math.PI * 2 + 1) + r() * cfg[2] * 0.3));
+    const res = rep.map((v, i) => Math.max(1, Math.round(v * 0.85 + (i % 3) - 1)));
+    return { labels: Array.from({ length: cfg[0] }, (_, i) => cfg[1](i)), rep, res };
+  }, [range]);
+  const sCol = { Reported: 'var(--slate)', Dispatched: 'var(--blue)', 'On Scene': 'var(--cyan)', Resolved: 'var(--green)' };
+  return html`<div className="page">
+    <${Head} title="Analytics" sub="Illustrative trends across incidents, districts and resources."><${Seg} label="Range" value=${range} onChange=${setRange} options=${[{ v: '24h', l: 'Last 24 hours' }, { v: '7d', l: '7 days' }, { v: '30d', l: '30 days' }]} /><//>
+    <div className="card"><div className="card-h"><h3>Response activity trend<small>Reported and resolved incidents · illustrative</small></h3><div className="leg-inline"><span style=${{ '--c': 'var(--cyan)' }}><i></i>Reported</span><span style=${{ '--c': 'var(--green)' }}><i></i>Resolved</span></div></div><div className="card-b"><${LineChart} labels=${trend.labels} series=${[{ name: 'Reported', color: 'var(--cyan)', values: trend.rep }, { name: 'Resolved', color: 'var(--green)', values: trend.res }]} /></div></div>
+    <div className="grid2">
+      <div className="card"><div className="card-h"><h3>Incidents by category<small>${incidents.length} demo records</small></h3></div><div className="card-b"><${HBars} rows=${Object.entries(CATS).map(([k, c]) => ({ label: c.label, value: byC[k] || 0, color: c.color })).sort((a, b) => b.value - a.value)} /></div></div>
+      <div className="card"><div className="card-h"><h3>Incident status distribution</h3></div><div className="card-b"><${Donut} big=${incidents.length} small="RECORDS" parts=${STATUSES.map((s) => ({ label: s, value: byS[s] || 0, color: sCol[s] }))} /></div></div>
+      <div className="card"><div className="card-h"><h3>Incidents by district<small>Illustrative</small></h3></div><div className="card-b"><${HBars} rows=${DISTRICTS.map((x) => ({ label: x.en, value: byD[x.id] || 0 })).sort((a, b) => b.value - a.value)} /></div></div>
+      <div className="card"><div className="card-h"><h3>Resource availability<small>${RES_AVAIL} of ${RES_TOTAL} units · illustrative</small></h3></div><div className="card-b"><${HBars} unit="%" max=${100} rows=${RES.map((c) => ({ label: c.label, value: Math.round((c.avail / c.total) * 100), color: c.color }))} /></div></div>
+    </div>
+    <${DemoNote} />
+  </div>`;
+}
+
+/* ---------- app ---------- */
+const PAGES = { overview: Overview, incidents: IncidentsPage, teams: TeamsPage, resources: ResourcesPage, intel: IntelPage, analytics: AnalyticsPage };
+function App() {
+  const [page, setPage] = useState('overview');
+  const [incidents, setIncidents] = useState(seedIncidents);
+  const [drawer, setDrawer] = useState(null);
+  const [modal, setModal] = useState(null);
+  const [toasts, setToasts] = useState([]);
+  const [query, setQuery] = useState('');
+  const [navOpen, setNavOpen] = useState(false);
+  const [mapSel, setMapSel] = useState(null);
+  const [read, setRead] = useState(() => new Set());
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 20000); return () => clearInterval(t); }, []);
+  useEffect(() => {
+    const k = (e) => { if (e.key === 'Escape') { if (modal) setModal(null); else if (drawer) setDrawer(null); else setNavOpen(false); } };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, [modal, drawer]);
+  const toast = (msg, warn) => { const id = Math.random(); setToasts((l) => [...l, { id, msg, warn }]); setTimeout(() => setToasts((l) => l.filter((x) => x.id !== id)), 3400); };
+  const go = (p) => { setPage(p); setNavOpen(false); window.scrollTo(0, 0); };
+  const advance = (id) => {
+    const inc = incidents.find((i) => i.id === id); if (!inc || inc.status === 'Resolved') return;
+    let team = inc.team;
+    if (inc.status === 'Reported' && !team) {
+      const want = CATS[inc.cat].team, free = (t) => teamState(t, incidents).status === 'Available';
+      const c = TEAMS.find((t) => t.cat === want && free(t)) || TEAMS.find(free);
+      if (!c) { toast('No team is available to dispatch right now.', true); return; }
+      team = c.id;
+    }
+    const next = STATUSES[STATUSES.indexOf(inc.status) + 1], t = Date.now();
+    const text = next === 'Dispatched' ? team + ' dispatched to location' : next === 'On Scene' ? 'Team arrived on scene' : 'Incident resolved and team released';
+    const add = team !== inc.team ? [{ t, text: team + ' assigned by coordinator' }] : [];
+    setIncidents((l) => l.map((i) => (i.id === id ? { ...i, status: next, team, tl: [...i.tl, ...add, { t: t + 1, text }] } : i)));
+    toast(id + ' is now ' + next);
+  };
+  const assignTeam = (id, teamId) => {
+    const t = Date.now();
+    setIncidents((l) => l.map((i) => (i.id === id ? { ...i, team: teamId, tl: [...i.tl, { t, text: TMAP[teamId].name + ' (' + teamId + ') assigned by coordinator' }] } : i)));
+    toast(TMAP[teamId].name + ' assigned to ' + id);
+  };
+  const createIncident = (f) => {
+    const num = Math.max(...incidents.map((i) => i.num)) + 1, t = Date.now();
+    const inc = { id: 'DEMO-' + num, num, cat: f.cat, title: CATS[f.cat].label, district: f.district, location: f.location, priority: f.priority, status: 'Reported', t0: t, team: null, desc: f.desc, pos: placeIn(f.district, num), tl: [{ t, text: 'Report received through demo intake' }] };
+    setIncidents((l) => [inc, ...l]);
+    setNavOpen(false);
+    setDrawer(inc.id);
+    toast('Demo incident ' + inc.id + ' created');
+  };
+  const reset = () => { setIncidents(seedIncidents()); setDrawer(null); setMapSel(null); setQuery(''); setRead(new Set()); toast('Demo data reset'); };
+  const locate = (id) => { setDrawer(null); setMapSel(id); go('overview'); };
+  const active = incidents.filter((i) => i.status !== 'Resolved');
+  const notices = active.filter((i) => i.priority === 'Critical' || i.priority === 'High').sort((a, b) => PRANK[a.priority] - PRANK[b.priority] || b.t0 - a.t0);
+  const ctx = { incidents, now, query, setQuery, openIncident: setDrawer, openCreate: () => setModal({ k: 'create' }), advance, assignTeam, createIncident, go, mapSel, setMapSel, resolvedToday: 37 + incidents.filter((i) => i.status === 'Resolved').length };
+  const Page = PAGES[page];
+  return html`<${Ctx.Provider} value=${ctx}>
+    <div className="app">
+      <${Sidebar} page=${page} go=${go} open=${navOpen} activeCount=${active.length} />
+      ${navOpen && html`<div className="navscrim" onClick=${() => setNavOpen(false)}></div>`}
+      <div className="main">
+        <${Header} page=${page} go=${go} query=${query} setQuery=${setQuery} onMenu=${() => setNavOpen(true)} notices=${notices} readSet=${read} markAllRead=${() => { setRead(new Set(notices.map((n) => n.id))); toast('Alerts marked as read'); }} onOpenIncident=${(id) => { setRead(new Set([...read, id])); setDrawer(id); }} onAbout=${() => setModal({ k: 'about' })} onReset=${reset} />
+        <main><${Page} key=${page} /></main>
+      </div>
+      ${drawer && html`<${Drawer} id=${drawer} onClose=${() => setDrawer(null)} onLocate=${locate} />`}
+      ${modal && modal.k === 'create' && html`<${CreateModal} onClose=${() => setModal(null)} />`}
+      ${modal && modal.k === 'about' && html`<${AboutModal} onClose=${() => setModal(null)} />`}
+      <${Toasts} list=${toasts} />
+    </div>
+  <//>`;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App} />`);
+</script>
